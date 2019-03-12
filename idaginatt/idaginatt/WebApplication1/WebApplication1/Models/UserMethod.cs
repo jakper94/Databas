@@ -7,6 +7,9 @@ namespace WebApplication1.Models
 {
     public class UserMethod
     {
-
+        public UserMethod()
+        {
+            
+        }
     }
 }
