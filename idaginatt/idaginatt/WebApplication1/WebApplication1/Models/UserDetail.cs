@@ -11,15 +11,16 @@ namespace WebApplication1.Models
         public UserDetail() { }
         [Key]
         public int User_Id { get; set; }
+        [Required]
         public string User_UserName { get; set; }
+        [Required]
         public string User_Password { get; set; }
+        
         public string User_FirstName { get; set; }
         public string User_LastName { get; set; }
         public string User_Class { get; set; }
+
         public Boolean User_HasVoted { get; set; }
         public Boolean User_IsAdmin { get; set; }
-        
-
-        
     }
 }
