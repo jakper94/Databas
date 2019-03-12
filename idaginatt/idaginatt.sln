@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "idaginatt", "idaginatt\idaginatt.sqlproj", "{0DC3AF74-5064-422B-8F1C-1D2F50895A16}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0DC3AF74-5064-422B-8F1C-1D2F50895A16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DC3AF74-5064-422B-8F1C-1D2F50895A16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DC3AF74-5064-422B-8F1C-1D2F50895A16}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{0DC3AF74-5064-422B-8F1C-1D2F50895A16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DC3AF74-5064-422B-8F1C-1D2F50895A16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DC3AF74-5064-422B-8F1C-1D2F50895A16}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7F1166A9-8674-4973-B88B-71E096ADC333}
+	EndGlobalSection
+EndGlobal
