@@ -28,7 +28,24 @@ namespace WebApplication1.Controllers
 
             return View();
         }
+        [HttpGet]
+        public IActionResult InsertNominee()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult InsertNominee(NomineeDetail nd)
+        {
+          
+                NomineeMethod nm = new NomineeMethod();
+                int i = 0;
+                string error = "";
+                i = nm.InsertNominee(nd, out error);
+                ViewBag.error = error;
 
+                return View();
+            
+        }
         public IActionResult Privacy()
         {
             return View();

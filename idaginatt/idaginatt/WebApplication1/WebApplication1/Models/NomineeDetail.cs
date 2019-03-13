@@ -12,7 +12,8 @@ namespace WebApplication1.Models
         [Key]
         public int Nominee_Id { get; set; }
         public string Nominee_FirstName { get; set; }
-        public string Nominee_Lastname { get; set; }
+        public string Nominee_LastName { get; set; }
+        public string Nominee_ImgLink { get; set; }
         public int Nominee_Votes { get; set; }
     }
 }
