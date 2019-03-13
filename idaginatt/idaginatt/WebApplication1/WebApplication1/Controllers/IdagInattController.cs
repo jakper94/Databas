@@ -43,10 +43,19 @@ namespace WebApplication1.Controllers
                 i = nm.InsertNominee(nd, out error);
                 ViewBag.error = error;
 
-                return View();
+                return RedirectToAction("NomineeList"); 
             
         }
-        public IActionResult Privacy()
+
+        public IActionResult NomineeList() { 
+            List<NomineeDetail> NomineeList = new List<NomineeDetail>();
+            NomineeMethod nm = new NomineeMethod();
+            string error = "";
+            NomineeList = nm.GetNomineeList(out error);
+            ViewBag.error = error;
+            return View(NomineeList);
+        }
+    public IActionResult Privacy()
         {
             return View();
         }

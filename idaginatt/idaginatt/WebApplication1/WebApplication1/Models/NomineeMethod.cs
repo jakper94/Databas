@@ -40,6 +40,47 @@ namespace WebApplication1.Models
                 dbConnection.Close();
             }
         }
-       
+        public List<NomineeDetail> GetNomineeList(out string errormsg)
+        {
+            SqlConnection dbConnection = new SqlConnection();
+            dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
+
+            string sqlstring = "Select * From Tbl_Nominee";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            SqlDataReader reader = null;
+
+            List<NomineeDetail> NomineeList = new List<NomineeDetail>();
+
+            errormsg = "";
+
+            try
+            {
+                dbConnection.Open();
+
+                reader = dbCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    NomineeDetail Nominee = new NomineeDetail();
+                    Nominee.Nominee_FirstName = reader["Nom_FirstName"].ToString();
+                    Nominee.Nominee_LastName = reader["Nom_LastName"].ToString();
+                    Nominee.Nominee_ImgLink = reader["Nom_ImgLink"].ToString();
+                    NomineeList.Add(Nominee);
+                }
+                return NomineeList;
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+
+        }
+
     }
 }
