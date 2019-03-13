@@ -50,7 +50,7 @@ namespace WebApplication1
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/IdagInatt/Error");
                 app.UseHsts();
             }
 
@@ -62,7 +62,7 @@ namespace WebApplication1
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=IdagInatt}/{action=Index}/{id?}");
             });
         }
     }
