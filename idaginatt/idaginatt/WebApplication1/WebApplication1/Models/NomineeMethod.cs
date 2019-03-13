@@ -14,7 +14,7 @@ namespace WebApplication1.Models
         {
             SqlConnection dbConnection = new SqlConnection();
             dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
-
+            
             string sqlstring = "INSERT INTO Tbl_Nominee (Nom_FirstName,Nom_LastName,Nom_ImgLink) VALUES (@firstName,@lastName,@imgLink)";
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
             dbCommand.Parameters.Add("firstName", SqlDbType.NVarChar, 30).Value = nd.Nominee_FirstName;
@@ -63,6 +63,7 @@ namespace WebApplication1.Models
                 while (reader.Read())
                 {
                     NomineeDetail Nominee = new NomineeDetail();
+                    Nominee.Nominee_Id = Convert.ToInt16(reader["Nom_Id"]);
                     Nominee.Nominee_FirstName = reader["Nom_FirstName"].ToString();
                     Nominee.Nominee_LastName = reader["Nom_LastName"].ToString();
                     Nominee.Nominee_ImgLink = reader["Nom_ImgLink"].ToString();
