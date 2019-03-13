@@ -2,6 +2,7 @@
 (
 	[Us_Id] INT IDENTITY (1, 1) NOT NULL,
 	[Us_UserName] NCHAR(10) NULL, 
+	[Us_Password] NCHAR(50) NULL,
     [Us_FirstName] NCHAR(10) NULL, 
     [Us_LastName] NCHAR(10) NULL, 
     [Us_HasVoted] NCHAR(10) NULL, 
