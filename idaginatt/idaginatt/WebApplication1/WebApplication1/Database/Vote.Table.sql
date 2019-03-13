@@ -1,6 +1,8 @@
 ﻿CREATE TABLE [dbo].[Tbl_Vote]
 (
-	[Vo_Id] INT NOT NULL PRIMARY KEY, 
+	[Vo_Id] INT IDENTITY (1, 1) NOT NULL, 
     [Vo_Motivation] NVARCHAR(100) NULL, 
-    [Vo_VotedOn] INT NULL
+    [Vo_VotedOn] INT NOT NULL,
+	CONSTRAINT [Pk_Tbl_Id] PRIMARY KEY CLUSTERED ([Nom_Id] ASC),
+	CONSTRAINT [FK_Tbl_Nominee] FOREIGN KEY ([Vo_VotedOn]) REFERENCES [dbo].[Tbl_Nominee] ([Nom_Id])
 )
