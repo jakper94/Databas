@@ -13,6 +13,6 @@ namespace WebApplication1.Models
         public int Nominee_Id { get; set; }
         public string Nominee_FirstName { get; set; }
         public string Nominee_Lastname { get; set; }
-        public int Nominee_amountOfVotes { get; set; }
+        public int Nominee_Votes { get; set; }
     }
 }
