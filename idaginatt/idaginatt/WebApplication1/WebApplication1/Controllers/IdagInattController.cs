@@ -74,6 +74,33 @@ namespace WebApplication1.Controllers
             i = nm.DeleteNominee(id, out error);
             return RedirectToAction("NomineeList");
         }
+        public ActionResult NomineeDetails(int id)
+        {
+            NomineeMethod nm = new NomineeMethod();
+            NomineeDetail nd = new NomineeDetail();
+            nd = nm.GetNomineeById(id, out string errormsg);
+
+
+            return View(nd);
+        }
+        [HttpGet]
+        public IActionResult EditNominee(int id)
+        {
+            NomineeMethod nm = new NomineeMethod();
+            NomineeDetail nd = new NomineeDetail();
+            nd = nm.GetNomineeById(id, out string errormsg);
+            return View(nd);
+        }
+        [HttpPost]
+        public IActionResult EditNominee(NomineeDetail nd)
+        {
+            NomineeMethod pm = new NomineeMethod();
+            string error = "";
+            int i = 0;
+            i = pm.UpdateNominee(nd, out error);
+
+            return RedirectToAction("NomineeList");
+        }
         public IActionResult Privacy()
         {
             return View();

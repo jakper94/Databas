@@ -15,12 +15,12 @@ namespace WebApplication1.Models
             SqlConnection dbConnection = new SqlConnection();
             dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
             
-            string sqlstring = "INSERT INTO Tbl_Nominee (Nom_FirstName,Nom_LastName,Nom_ImgLink) VALUES (@firstName,@lastName,@imgLink)";
+            string sqlstring = "INSERT INTO Tbl_Nominee (Nom_FirstName,Nom_LastName,Nom_ImgLink,Nom_Votes) VALUES (@firstName,@lastName,@imgLink,@votes)";
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
             dbCommand.Parameters.Add("firstName", SqlDbType.NVarChar, 30).Value = nd.Nominee_FirstName;
             dbCommand.Parameters.Add("lastName", SqlDbType.NVarChar, 30).Value = nd.Nominee_LastName;
             dbCommand.Parameters.Add("imgLink", SqlDbType.Int).Value = nd.Nominee_ImgLink;
-
+            dbCommand.Parameters.Add("votes", SqlDbType.Int).Value = 0;
             try
             {
                 dbConnection.Open();
@@ -111,6 +111,7 @@ namespace WebApplication1.Models
                 nd.Nominee_ImgLink =myDS.Tables["MyNominee"].Rows[i]["Nom_ImgLink"].ToString();
 
 
+
                 errormsg = "";
                 return nd;
             }
@@ -118,6 +119,38 @@ namespace WebApplication1.Models
             {
                 errormsg = e.Message;
                 return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+
+        }
+        public int UpdateNominee(NomineeDetail nd, out string errormsg)
+        {
+            SqlConnection dbConnection = new SqlConnection();
+            dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
+            string sqlstring = "UPDATE Tbl_Nominee SET Nom_FirstName= @firstName , Nom_LastName= @lastName , Nom_Votes = @votes, Nom_ImgLink = @imgLink WHERE Nom_Id = @nomineeId";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+            dbCommand.Parameters.Add("nomineeId", SqlDbType.Int).Value = nd.Nominee_Id;
+            dbCommand.Parameters.Add("firstName", SqlDbType.NVarChar, 30).Value = nd.Nominee_FirstName;
+            dbCommand.Parameters.Add("lastName", SqlDbType.NVarChar, 30).Value = nd.Nominee_LastName;
+            dbCommand.Parameters.Add("votes", SqlDbType.Int).Value = nd.Nominee_Votes;
+            dbCommand.Parameters.Add("imgLink", SqlDbType.NVarChar, 30).Value = nd.Nominee_ImgLink;
+
+            try
+            {
+                dbConnection.Open();
+                int i = 0;
+                i = dbCommand.ExecuteNonQuery();
+                if (i == 1) { errormsg = ""; }
+                else { errormsg = "Det gick inte att uppdatera en nominee i databasen"; }
+                return (i);
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return 0;
             }
             finally
             {

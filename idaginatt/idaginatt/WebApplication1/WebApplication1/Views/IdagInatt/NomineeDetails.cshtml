@@ -1,0 +1,48 @@
+﻿@model WebApplication1.Models.NomineeDetail
+
+@{
+    ViewData["Title"] = "NomineeDetails";
+}
+
+<h2>NomineeDetails</h2>
+
+<div>
+    <h4>NomineeDetail</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nominee_Id)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nominee_Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Nominee_FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nominee_FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Nominee_LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nominee_LastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Nominee_ImgLink)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nominee_ImgLink)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Nominee_Votes)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nominee_Votes)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Nominee_Id">Edit</a> |
+    <a asp-action="NomineeList">Back to List</a>
+</div>
