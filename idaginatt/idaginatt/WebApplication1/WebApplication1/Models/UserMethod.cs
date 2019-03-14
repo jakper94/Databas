@@ -49,15 +49,21 @@ namespace WebApplication1.Models
 
             dbConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Idag_Inatt;Integrated Security=True";
 
-            String sqlString = "SELECT Us_Password FROM Tbl_User WHERE Us_UserName = @userName";
+            String sqlString = "SELECT Us_Password FROM Tbl_User WHERE Us_UserName = '" + userName + "'";
             SqlCommand dbCommand = new SqlCommand(sqlString, dbConnection);
+        //    dbCommand.Parameters.Add("userName", SqlDbType.NChar,8).Value = userName;
+
             SqlDataReader reader = null;
             errormsg = "";
             try
             {
                 dbConnection.Open();
                 reader = dbCommand.ExecuteReader();
+                reader.Read();
                 string corr_password = reader["Us_Password"].ToString();
+                reader.Close();
+                Console.WriteLine(corr_password);
+                Console.WriteLine(password);
                 if (corr_password == null)
                 {
                     errormsg = "Username does not exist";
