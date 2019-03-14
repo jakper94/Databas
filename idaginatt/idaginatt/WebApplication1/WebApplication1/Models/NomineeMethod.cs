@@ -82,6 +82,75 @@ namespace WebApplication1.Models
             }
 
         }
+        public NomineeDetail GetNomineeById(int id, out string errormsg)
+        {
+            //sakapa SqlConnection
+            SqlConnection dbConnection = new SqlConnection();
+            //Koppling mot SQL  Server
+            dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
+
+            //Sqlstring för att hämta alla personer
+            string sqlstring = "Select * From Tbl_Nominee Where Nom_Id = @id";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+            dbCommand.Parameters.Add("id", SqlDbType.Int).Value = id;
+            //skapa en adapter
+            SqlDataAdapter myAdapter = new SqlDataAdapter(dbCommand);
+            DataSet myDS = new DataSet();
+
+
+            try
+            {
+                dbConnection.Open();
+                myAdapter.Fill(myDS, "MyNominee");
+                int i = 0;
+                NomineeDetail nd = new NomineeDetail();
+                nd.Nominee_Id = Convert.ToInt16(myDS.Tables["MyNominee"].Rows[i]["Nom_Id"]);
+                nd.Nominee_FirstName = myDS.Tables["MyNominee"].Rows[i]["Nom_FirstName"].ToString();
+                nd.Nominee_LastName = myDS.Tables["MyNominee"].Rows[i]["Nom_LastName"].ToString();
+                nd.Nominee_Votes = Convert.ToInt16(myDS.Tables["MyNominee"].Rows[i]["Nom_Votes"]);
+                nd.Nominee_ImgLink =myDS.Tables["MyNominee"].Rows[i]["Nom_ImgLink"].ToString();
+
+
+                errormsg = "";
+                return nd;
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+
+        }
+        public int DeleteNominee(int id, out string errormsg)
+        {
+            SqlConnection dbConnection = new SqlConnection();
+            dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
+            string sqlstring = "DELETE FROM Tbl_Nominee WHERE Nom_Id = @id";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+            dbCommand.Parameters.Add("id", SqlDbType.Int).Value = id;
+            try
+            {
+                dbConnection.Open();
+                int i = 0;
+                i = dbCommand.ExecuteNonQuery();
+                if (i == 1) { errormsg = ""; }
+                else { errormsg = "Det raderas inte en spelare i databasen"; }
+                return (i);
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return 0;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
 
     }
 }
