@@ -64,24 +64,20 @@ namespace WebApplication1.Models
                 reader.Close();
                 Console.WriteLine(corr_password);
                 Console.WriteLine(password);
-                if (corr_password == null)
-                {
-                    errormsg = "Username does not exist";
-                    return false;
-                }
+    
                 if (corr_password.Equals(password))
                 {
                     return true;
                 }
                 else
                 {
-                    errormsg = "Incorrect password";
+                    errormsg = "The password is incorrect.";
                     return false;
                 }
             }
             catch (Exception e)
             {
-                errormsg = e.Message;
+                errormsg = "The username does not exist.";
                 return false;
             }
             finally

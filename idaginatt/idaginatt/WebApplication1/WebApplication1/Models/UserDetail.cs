@@ -12,7 +12,7 @@ namespace WebApplication1.Models
         public UserDetail() { }
         [Key]
         public int User_Id { get; set; }
-        [Required, DisplayName("User Name")]
+        [Required, DisplayName("Username")]
         public string User_UserName { get; set; }
         [Required, DisplayName("Password"), DataType(DataType.Password)]
         public string User_Password { get; set; }
@@ -23,5 +23,6 @@ namespace WebApplication1.Models
 
         public Boolean User_HasVoted { get; set; }
         public Boolean User_IsAdmin { get; set; }
+        public string LogInErrorMessage { get; set; }
     }
 }

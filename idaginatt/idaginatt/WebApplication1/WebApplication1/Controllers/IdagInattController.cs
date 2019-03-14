@@ -127,7 +127,8 @@ namespace WebApplication1.Controllers
             {
                 return View("Index");
             }
-            return View("Login");
+            ud.LogInErrorMessage = error;
+            return View("Login", ud);
         }
 
     }

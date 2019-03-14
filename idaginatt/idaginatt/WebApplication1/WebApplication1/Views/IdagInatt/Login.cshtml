@@ -20,6 +20,9 @@
                 <input asp-for="User_Password" class="form-control" />
                 <span asp-validation-for="User_Password" class="text-danger"></span>
             </div>
+            <label class="text-danger" role="alert">
+                @Html.DisplayFor(model => model.LogInErrorMessage)
+            </label>
             <div class="form-group">
                 <input type="submit" value="Login" class="btn btn-default" />
             </div>
