@@ -1,0 +1,34 @@
+﻿@model WebApplication1.Models.VoteDetail
+
+@{
+    ViewData["Title"] = "VoteSite";
+}
+
+<h2>Rösta på</h2>
+<h3>@ViewBag.Name</h3>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="VoteSite">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Vote_Motivation" class="control-label"></label>
+                <textarea asp-for="Vote_Motivation" class="form-control"></textarea>
+                <span asp-validation-for="Vote_Motivation" class="text-danger"></span>
+
+            </div>
+            @ViewBag.voteId;
+            <div class="form-group">
+                <input type="submit" value="Rösta" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

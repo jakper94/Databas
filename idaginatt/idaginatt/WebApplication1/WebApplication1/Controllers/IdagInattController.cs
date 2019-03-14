@@ -11,6 +11,7 @@ namespace WebApplication1.Controllers
 {
     public class IdagInattController : Controller
     {
+        int tempID;
         public IActionResult Index()
         {
             return View();
@@ -74,6 +75,15 @@ namespace WebApplication1.Controllers
             i = nm.DeleteNominee(id, out error);
             return RedirectToAction("NomineeList");
         }
+        public ActionResult NomineeDetails(int id)
+        {
+            NomineeMethod nm = new NomineeMethod();
+            NomineeDetail nd = new NomineeDetail();
+            nd = nm.GetNomineeById(id, out string errormsg);
+
+
+            return View(nd);
+        }
         public IActionResult NomineesToVoteOn()
         {
             List<NomineeDetail> NomineeList = new List<NomineeDetail>();
@@ -82,6 +92,31 @@ namespace WebApplication1.Controllers
             NomineeList = nm.GetNomineeList(out error);
             ViewBag.error = error;
             return View(NomineeList);
+        }
+        [HttpGet]
+        public IActionResult VoteSite(int id)
+        {
+            NomineeMethod nm = new NomineeMethod();
+            NomineeDetail nd = nm.GetNomineeById(id, out string errormsg);
+            ViewBag.Name = nd.Nominee_FirstName + nd.Nominee_LastName;
+            tempID = nd.Nominee_Id;
+            ViewBag.voteId = tempID;
+            HttpContext.Session.SetInt32("extraInfo",tempID);
+            return View();
+        }
+        [HttpPost]
+        public IActionResult VoteSite(VoteDetail vd)
+        {
+            
+            VoteMethod vm = new VoteMethod();
+            int i = 0;
+            string error = "";
+            int temp = Convert.ToInt32(HttpContext.Session.GetInt32("extraInfo"));
+
+            i = vm.InsertVote(vd,temp, out error);
+            ViewBag.error = error;
+            return RedirectToAction("NomineesToVoteOn");
+
         }
         public IActionResult Privacy()
         {
