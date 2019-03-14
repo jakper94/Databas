@@ -55,7 +55,25 @@ namespace WebApplication1.Controllers
             ViewBag.error = error;
             return View(NomineeList);
         }
-    public IActionResult Privacy()
+        [HttpGet]
+        public IActionResult DeleteNominee(int id)
+        {
+            NomineeMethod nm = new NomineeMethod();
+            NomineeDetail nd = new NomineeDetail();
+            nd = nm.GetNomineeById(id, out string errormsg);
+            return View(nd);
+        }
+
+        [HttpPost, ActionName("DeleteNominee")]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            NomineeMethod nm = new NomineeMethod();
+            string error = "";
+            int i = 0;
+            i = nm.DeleteNominee(id, out error);
+            return RedirectToAction("NomineeList");
+        }
+        public IActionResult Privacy()
         {
             return View();
         }

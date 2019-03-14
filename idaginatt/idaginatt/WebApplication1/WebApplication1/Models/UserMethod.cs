@@ -71,5 +71,46 @@ namespace WebApplication1.Models
                 dbConnection.Close();
             }
         }
+        public  GetPlayeById(int id, out string errormsg)
+        {
+            //sakapa SqlConnection
+            SqlConnection dbConnection = new SqlConnection();
+            //Koppling mot SQL  Server
+            dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Team; Integrated Security = True;";
+
+            //Sqlstring för att hämta alla personer
+            string sqlstring = "Select * From Tbl_Player Where Pl_Id = @id";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+            dbCommand.Parameters.Add("id", SqlDbType.Int).Value = id;
+            //skapa en adapter
+            SqlDataAdapter myAdapter = new SqlDataAdapter(dbCommand);
+            DataSet myDS = new DataSet();
+
+
+            try
+            {
+                dbConnection.Open();
+                myAdapter.Fill(myDS, "myPlayer");
+                int i = 0;
+                PlayerDetalj pd = new PlayerDetalj();
+                pd.PlayerId = Convert.ToInt16(myDS.Tables["myPlayer"].Rows[i]["Pl_Id"]);
+                pd.FirstName = myDS.Tables["myPlayer"].Rows[i]["Pl_FirstName"].ToString();
+                pd.LastName = myDS.Tables["myPlayer"].Rows[i]["Pl_LastName"].ToString();
+                pd.TeamId = Convert.ToInt16(myDS.Tables["myPlayer"].Rows[i]["Pl_Plays"]);
+
+                errormsg = "";
+                return pd;
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+
+        }
     }
 }
