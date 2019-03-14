@@ -43,28 +43,40 @@ namespace WebApplication1.Models
             }
         }
 
-        public int LogIn(string userName, string password, out string errormsg)
+        public bool LogIn(string userName, string password, out string errormsg)
         {
             SqlConnection dbConnection = new SqlConnection();
 
             dbConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Idag_Inatt;Integrated Security=True";
 
-            String sqlString = "SELECT FROM Tbl_User WHERE Us_UserName = @userName";
+            String sqlString = "SELECT Us_Password FROM Tbl_User WHERE Us_UserName = @userName";
             SqlCommand dbCommand = new SqlCommand(sqlString, dbConnection);
-
+            SqlDataReader reader = null;
+            errormsg = "";
             try
             {
                 dbConnection.Open();
-                int i = 0;
-                i = dbCommand.ExecuteNonQuery();
-                if (i == 1) { errormsg = ""; }
-                else { errormsg = "User not added to database."; }
-                return (i);
+                reader = dbCommand.ExecuteReader();
+                string corr_password = reader["Us_Password"].ToString();
+                if (corr_password == null)
+                {
+                    errormsg = "Username does not exist";
+                    return false;
+                }
+                if (corr_password.Equals(password))
+                {
+                    return true;
+                }
+                else
+                {
+                    errormsg = "Incorrect password";
+                    return false;
+                }
             }
             catch (Exception e)
             {
                 errormsg = e.Message;
-                return 0;
+                return false;
             }
             finally
             {
