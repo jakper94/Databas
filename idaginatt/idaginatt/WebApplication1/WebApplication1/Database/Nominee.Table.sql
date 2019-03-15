@@ -5,5 +5,6 @@
     [Nom_LastName] NCHAR(50) NULL, 
     [Nom_ImgLink]  varbinary(max) NULL,
 	[Nom_Votes] INT NULL,
+	[Nom_Year] INT NULL,
 	CONSTRAINT [Pk_Tbl_Nominee] PRIMARY KEY CLUSTERED ([Nom_Id] ASC)
 )
