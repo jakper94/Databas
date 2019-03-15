@@ -7,7 +7,6 @@
     [Us_HasVoted] BIT NULL, 
     [Us_IsAdmin] BIT NULL, 
     [Us_Class] NCHAR(4) NULL, 
-    [Us_HasChangedPassword] BIT NULL,
 	CONSTRAINT [Pk_Tbl_User] PRIMARY KEY ([Us_UserName]),
 	
 )
