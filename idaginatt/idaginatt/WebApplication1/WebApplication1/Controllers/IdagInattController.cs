@@ -44,19 +44,24 @@ namespace WebApplication1.Controllers
                 string error = "";
                 i = nm.InsertNominee(nd, out error);
                 ViewBag.error = error;
-
+                
                 return RedirectToAction("NomineeList"); 
             
         }
 
-        public IActionResult NomineeList() { 
+        public IActionResult NomineeList(int year) { 
             List<NomineeDetail> NomineeList = new List<NomineeDetail>();
             NomineeMethod nm = new NomineeMethod();
             string error = "";
             NomineeList = nm.GetNomineeList(out error);
             ViewBag.error = error;
+            HttpContext.Session.SetInt32("year", year);
+            ViewBag.year = Convert.ToInt32(HttpContext.Session.GetInt32("year"));
+
             return View(NomineeList);
         }
+      
+
         [HttpGet]
         public IActionResult DeleteNominee(int id)
         {
@@ -86,10 +91,12 @@ namespace WebApplication1.Controllers
         }
         public IActionResult NomineesToVoteOn()
         {
+            int year = Convert.ToInt32(HttpContext.Session.GetInt32("year"));
+
             List<NomineeDetail> NomineeList = new List<NomineeDetail>();
             NomineeMethod nm = new NomineeMethod();
             string error = "";
-            NomineeList = nm.GetNomineeList(out error);
+            NomineeList = nm.GetNomineeListByYear(year,out error);
             ViewBag.error = error;
             return View(NomineeList);
         }

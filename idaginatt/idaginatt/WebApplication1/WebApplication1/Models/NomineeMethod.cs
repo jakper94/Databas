@@ -15,12 +15,14 @@ namespace WebApplication1.Models
             SqlConnection dbConnection = new SqlConnection();
             dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
             
-            string sqlstring = "INSERT INTO Tbl_Nominee (Nom_FirstName,Nom_LastName,Nom_ImgLink,Nom_Votes) VALUES (@firstName,@lastName,@imgLink,@votes)";
+            string sqlstring = "INSERT INTO Tbl_Nominee (Nom_FirstName,Nom_LastName,Nom_ImgLink,Nom_Votes,Nom_Year) VALUES (@firstName,@lastName,@imgLink,@votes,@year)";
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
             dbCommand.Parameters.Add("firstName", SqlDbType.NVarChar, 30).Value = nd.Nominee_FirstName;
             dbCommand.Parameters.Add("lastName", SqlDbType.NVarChar, 30).Value = nd.Nominee_LastName;
             dbCommand.Parameters.Add("imgLink", SqlDbType.Int).Value = nd.Nominee_ImgLink;
             dbCommand.Parameters.Add("votes", SqlDbType.Int).Value = 0;
+            dbCommand.Parameters.Add("year", SqlDbType.Int).Value = nd.Nominee_Year;
+
             try
             {
                 dbConnection.Open();
@@ -67,6 +69,8 @@ namespace WebApplication1.Models
                     Nominee.Nominee_FirstName = reader["Nom_FirstName"].ToString();
                     Nominee.Nominee_LastName = reader["Nom_LastName"].ToString();
                     Nominee.Nominee_ImgLink = reader["Nom_ImgLink"].ToString();
+                    Nominee.Nominee_Year = Convert.ToInt16(reader["Nom_Year"]);
+
                     NomineeList.Add(Nominee);
                 }
                 return NomineeList;
@@ -183,6 +187,51 @@ namespace WebApplication1.Models
             {
                 dbConnection.Close();
             }
+        }
+        public List<NomineeDetail> GetNomineeListByYear(int year,out string errormsg)
+        {
+            SqlConnection dbConnection = new SqlConnection();
+            dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
+
+            string sqlstring = "Select * From Tbl_Nominee Where Nom_Year = @year";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+            dbCommand.Parameters.Add("year", SqlDbType.Int).Value = year;
+
+            SqlDataReader reader = null;
+
+            List<NomineeDetail> NomineeList = new List<NomineeDetail>();
+
+            errormsg = "";
+
+            try
+            {
+                dbConnection.Open();
+
+                reader = dbCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    NomineeDetail Nominee = new NomineeDetail();
+                    Nominee.Nominee_Id = Convert.ToInt16(reader["Nom_Id"]);
+                    Nominee.Nominee_FirstName = reader["Nom_FirstName"].ToString();
+                    Nominee.Nominee_LastName = reader["Nom_LastName"].ToString();
+                    Nominee.Nominee_ImgLink = reader["Nom_ImgLink"].ToString();
+                    Nominee.Nominee_Year = Convert.ToInt16(reader["Nom_Year"]);
+
+                    NomineeList.Add(Nominee);
+                }
+                return NomineeList;
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+
         }
 
     }

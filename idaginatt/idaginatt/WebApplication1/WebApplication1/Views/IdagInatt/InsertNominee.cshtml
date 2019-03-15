@@ -12,7 +12,7 @@
     <div class="col-md-4">
         <form asp-action="InsertNominee">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-         
+
             <div class="form-group">
                 <label asp-for="Nominee_FirstName" class="control-label"></label>
                 <input asp-for="Nominee_FirstName" class="form-control" />
@@ -27,6 +27,11 @@
                 <label asp-for="Nominee_ImgLink" class="control-label"></label>
                 <input asp-for="Nominee_ImgLink" class="form-control" />
                 <span asp-validation-for="Nominee_ImgLink" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Nominee_Year" class="control-label"></label>
+                <input asp-for="Nominee_Year" class="form-control" />
+                <span asp-validation-for="Nominee_Year" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />

@@ -7,7 +7,7 @@
 <h2>NomineeList</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="InsertNominee">Lägg till en nominerad.</a>
 </p>
 <table class="table">
     <thead>
@@ -25,35 +25,46 @@
                 @Html.DisplayNameFor(model => model.Nominee_ImgLink)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Nominee_Votes)
+                @Html.DisplayNameFor(model => model.Nominee_Year)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nominee_Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nominee_FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nominee_LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nominee_ImgLink)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nominee_Votes)
-            </td>
-            <td>
-                <a asp-action="EditNominee" asp-route-id="@item.Nominee_Id">Edit</a> |
-                <a asp-action="NomineeDetails" asp-route-id="@item.Nominee_Id">Details</a> |
-                <a asp-action="NomineeDelete" asp-route-id="@item.Nominee_Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nominee_Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nominee_FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nominee_LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nominee_ImgLink)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nominee_Year)
+                </td>
+                <td>
+                    <a asp-action="EditNominee" asp-route-id="@item.Nominee_Id">Edit</a> |
+                    <a asp-action="NomineeDetails" asp-route-id="@item.Nominee_Id">Details</a> |
+                    <a asp-action="NomineeDelete" asp-route-id="@item.Nominee_Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+
+<h2>Välj vilka nominerade som ska visas.</h2>
+<h3>Just nu visas @ViewBag.year</h3>
+@using (Html.BeginForm())
+{
+    <p>
+        Året som ska visas: @Html.TextBox("year") <br />
+    </p>
+}       
