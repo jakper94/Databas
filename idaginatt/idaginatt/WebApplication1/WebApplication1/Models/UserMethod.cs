@@ -85,5 +85,64 @@ namespace WebApplication1.Models
                 dbConnection.Close();
             }
         }
+
+        public int UpdateUserInfo(UserDetail ud, out string errormsg)
+        {
+            SqlConnection dbConnection = new SqlConnection();
+            dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
+            string sqlstring = "UPDATE Tbl_User SET Us_FirstName = @firstName , Us_LastName = @lastName , Us_Class = @class, WHERE Us_UserName = @userName";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+            dbCommand.Parameters.Add("userName", SqlDbType.NChar, 8).Value = ud.User_UserName;
+            dbCommand.Parameters.Add("firstName", SqlDbType.NVarChar, 20).Value = ud.User_FirstName;
+            dbCommand.Parameters.Add("lastName", SqlDbType.NVarChar, 50).Value = ud.User_LastName;
+            dbCommand.Parameters.Add("class", SqlDbType.NChar, 4).Value = ud.User_Class;
+
+            try
+            {
+                dbConnection.Open();
+                int i = 0;
+                i = dbCommand.ExecuteNonQuery();
+                if (i == 1) { errormsg = ""; }
+                else { errormsg = "User not updated in database"; }
+                return (i);
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return 0;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+
+        }
+
+        public int DeleteUser(string userName, out string errormsg)
+        {
+            SqlConnection dbConnection = new SqlConnection();
+            dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
+            string sqlstring = "DELETE FROM Tbl_User WHERE Us_UserName = @userName";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+            dbCommand.Parameters.Add("userName", SqlDbType.NChar,8).Value = userName;
+            try
+            {
+                dbConnection.Open();
+                int i = 0;
+                i = dbCommand.ExecuteNonQuery();
+                if (i == 1) { errormsg = ""; }
+                else { errormsg = "User not removed from database"; }
+                return (i);
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return 0;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
     }
 }
