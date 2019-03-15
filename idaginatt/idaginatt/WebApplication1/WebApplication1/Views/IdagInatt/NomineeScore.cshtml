@@ -1,0 +1,28 @@
+﻿@model IEnumerable<WebApplication1.Models.ViewModelIPA>
+
+@{
+    ViewData["Title"] = "NomineeScore";
+}
+
+<h2>NomineeScore</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (WebApplication1.Models.NomineeDetail nominee in Model.NomineeList)
+        {
+            <tr>
+                <td>@nominee.FirstName</td>
+                <td>@PlayerTeam.LastName</td>
+                <td>@PlayerTeam.PlaysInTeam</td>
+            </tr>
+        }
+    </tbody>
+</table>

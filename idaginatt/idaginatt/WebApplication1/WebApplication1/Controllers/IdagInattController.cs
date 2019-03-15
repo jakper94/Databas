@@ -55,9 +55,10 @@ namespace WebApplication1.Controllers
             string error = "";
             NomineeList = nm.GetNomineeList(out error);
             ViewBag.error = error;
+            if(year != 0) {
             HttpContext.Session.SetInt32("year", year);
+            }
             ViewBag.year = Convert.ToInt32(HttpContext.Session.GetInt32("year"));
-
             return View(NomineeList);
         }
       
@@ -123,7 +124,21 @@ namespace WebApplication1.Controllers
             i = vm.InsertVote(vd,temp, out error);
             ViewBag.error = error;
             return RedirectToAction("NomineesToVoteOn");
-
+        }
+        public IActionResult NomineeScore()
+        {
+            VoteMethod vm = new VoteMethod();
+            NomineeMethod nm = new NomineeMethod();
+            ViewModelIPA myModel = new ViewModelIPA()
+            {
+                NomineeLista = nm.GetNomineeList(out string msg1),
+                VoteLista = vm.GetVoteList(out string msg2)
+            };
+            return View(myModel);
+        }
+        public IActionResult Admin()
+        {
+            return View();
         }
         public IActionResult Privacy()
         {
