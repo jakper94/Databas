@@ -49,9 +49,44 @@ namespace WebApplication1.Models
 
             dbConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Idag_Inatt;Integrated Security=True";
 
-            String sqlString = "SELECT Us_Password, Us_IsAdmin FROM Tbl_User WHERE Us_UserName = '" + userName + "'";
+            String sqlString = "SELECT Us_UserName FROM Tbl_User WHERE Us_UserName = '" + userName + "'";
             SqlCommand dbCommand = new SqlCommand(sqlString, dbConnection);
         //    dbCommand.Parameters.Add("userName", SqlDbType.NChar,8).Value = userName;
+
+            SqlDataReader reader = null;
+            errormsg = "";
+            try
+            {
+                dbConnection.Open();
+                reader = dbCommand.ExecuteReader();
+                reader.Read();
+                string obj = reader["Us_UserName"].ToString();
+                reader.Close();
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+
+                errormsg = "The username does not exist.";
+                return false;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
+
+        public bool AdminLogIn(string userName, string password, out string errormsg)
+        {
+            SqlConnection dbConnection = new SqlConnection();
+
+            dbConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Idag_Inatt;Integrated Security=True";
+
+            String sqlString = "SELECT Us_Password, Us_IsAdmin FROM Tbl_User WHERE Us_UserName = '" + userName + "'";
+            SqlCommand dbCommand = new SqlCommand(sqlString, dbConnection);
+            //    dbCommand.Parameters.Add("userName", SqlDbType.NChar,8).Value = userName;
 
             SqlDataReader reader = null;
             errormsg = "";
@@ -63,10 +98,10 @@ namespace WebApplication1.Models
                 string corr_password = reader["Us_Password"].ToString();
                 bool isAdmin = reader["Us_IsAdmin"] as bool? ?? false;
                 reader.Close();
-               
+
                 if (corr_password.Equals(password))
                 {
-                    if(isAdmin)
+                    if (isAdmin)
                     {
                         return true;
                     }
