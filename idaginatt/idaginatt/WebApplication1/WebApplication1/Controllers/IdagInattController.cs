@@ -148,5 +148,24 @@ namespace WebApplication1.Controllers
             return View("Login", ud);
         }
 
+        [HttpGet]
+        public IActionResult AdminLogin()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AdminLogin(UserDetail ud)
+        {
+            UserMethod um = new UserMethod();
+            string error = "";
+            if (um.LogIn(ud.User_UserName, ud.User_Password, out error) == true)
+            {
+                return View("Index");
+            }
+            ud.LogInErrorMessage = error;
+            return View("AdminLogin", ud);
+        }
+
     }
 }
