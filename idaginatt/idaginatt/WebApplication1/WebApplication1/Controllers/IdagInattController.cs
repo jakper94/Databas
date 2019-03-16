@@ -55,9 +55,10 @@ namespace WebApplication1.Controllers
             string error = "";
             NomineeList = nm.GetNomineeList(out error);
             ViewBag.error = error;
+            if(year != 0) {
             HttpContext.Session.SetInt32("year", year);
+            }
             ViewBag.year = Convert.ToInt32(HttpContext.Session.GetInt32("year"));
-
             return View(NomineeList);
         }
       
@@ -123,7 +124,42 @@ namespace WebApplication1.Controllers
             i = vm.InsertVote(vd,temp, out error);
             ViewBag.error = error;
             return RedirectToAction("NomineesToVoteOn");
+        }
 
+
+        [HttpGet]
+        public IActionResult NomineeScore()
+        {
+            List<NomineeDetail> NomineeList = new List<NomineeDetail>();  
+            NomineeMethod nm = new NomineeMethod();
+
+            NomineeList = nm.GetNomineeList(out string msg1);
+                     
+            return View(NomineeList);
+        }
+        [HttpPost]
+        public IActionResult NomineeScore(string ByYear)
+        {
+            int i = Convert.ToInt32(ByYear);
+            List<NomineeDetail> NomineeList = new List<NomineeDetail>();
+            NomineeMethod nm = new NomineeMethod();
+            NomineeList = nm.GetNomineeListByYear(i, out string error);
+            ViewData["ByYear"] = ByYear;
+            return View(NomineeList);
+        }
+        public IActionResult Motivations(int id)
+        {
+            NomineeMethod nm = new NomineeMethod();
+            NomineeDetail nd = nm.GetNomineeById(id, out string errormsg);
+            List<VoteDetail> voteList = new List<VoteDetail>();
+            VoteMethod vm = new VoteMethod();
+            voteList = vm.GetMotivationListById(id, out string msg);
+            ViewBag.Name = nd.Nominee_FirstName+ " " + nd.Nominee_LastName;
+            return View(voteList);
+        }
+        public IActionResult Admin()
+        {
+            return View();
         }
         public IActionResult Privacy()
         {

@@ -1,0 +1,31 @@
+﻿@model IEnumerable<WebApplication1.Models.VoteDetail>
+
+@{
+    ViewData["Title"] = "Motivations";
+}
+
+<h2>Motivativeringar för:</h2>
+<h2>@ViewBag.Name</h2>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Vote_Motivation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vote_Motivation)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-action="NomineeScore">Tillbaka till listan med de nominerade</a>

@@ -14,7 +14,7 @@ namespace WebApplication1.Models
         {
             SqlConnection dbConnection = new SqlConnection();
             dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
-            
+
             string sqlstring = "INSERT INTO Tbl_Nominee (Nom_FirstName,Nom_LastName,Nom_ImgLink,Nom_Votes,Nom_Year) VALUES (@firstName,@lastName,@imgLink,@votes,@year)";
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
             dbCommand.Parameters.Add("firstName", SqlDbType.NVarChar, 30).Value = nd.Nominee_FirstName;
@@ -112,7 +112,7 @@ namespace WebApplication1.Models
                 nd.Nominee_FirstName = myDS.Tables["MyNominee"].Rows[i]["Nom_FirstName"].ToString();
                 nd.Nominee_LastName = myDS.Tables["MyNominee"].Rows[i]["Nom_LastName"].ToString();
                 nd.Nominee_Votes = Convert.ToInt16(myDS.Tables["MyNominee"].Rows[i]["Nom_Votes"]);
-                nd.Nominee_ImgLink =myDS.Tables["MyNominee"].Rows[i]["Nom_ImgLink"].ToString();
+                nd.Nominee_ImgLink = myDS.Tables["MyNominee"].Rows[i]["Nom_ImgLink"].ToString();
 
 
 
@@ -130,6 +130,7 @@ namespace WebApplication1.Models
             }
 
         }
+        
         public int UpdateNominee(NomineeDetail nd, out string errormsg)
         {
             SqlConnection dbConnection = new SqlConnection();
@@ -193,7 +194,7 @@ namespace WebApplication1.Models
             SqlConnection dbConnection = new SqlConnection();
             dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
 
-            string sqlstring = "Select * From Tbl_Nominee Where Nom_Year = @year";
+            string sqlstring = "Select * From Tbl_Nominee Where = @year";
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
             dbCommand.Parameters.Add("year", SqlDbType.Int).Value = year;
 

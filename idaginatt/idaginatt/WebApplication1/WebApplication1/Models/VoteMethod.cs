@@ -80,5 +80,44 @@ namespace WebApplication1.Models
             }
 
         }
+        public List<VoteDetail> GetMotivationListById(int id,out string errormsg)
+        {
+            SqlConnection dbConnection = new SqlConnection();
+            dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
+
+            string sqlstring = "Select Vo_Motivation From Tbl_Vote Where Vo_VotedOn = @id";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+            dbCommand.Parameters.Add("id", SqlDbType.Int).Value = id;
+            SqlDataReader reader = null;
+
+            List<VoteDetail> VoteList = new List<VoteDetail>();
+
+            errormsg = "";
+
+            try
+            {
+                dbConnection.Open();
+
+                reader = dbCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    VoteDetail vote = new VoteDetail();
+                    vote.Vote_Motivation = reader["Vo_Motivation"].ToString();
+                    VoteList.Add(vote);
+                }
+                return VoteList;
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+
+        }
     }
 }
