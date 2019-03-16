@@ -4,9 +4,8 @@
     ViewData["Title"] = "Attend";
 }
 
-<h2>Attend</h2>
+<h2>Anmälan till IDag</h2>
 
-<h4>Anmälan till IDag</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -19,7 +18,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Attending_Foodpref" class="control-label"></label>
-                <input asp-for="Attending_Foodpref" class="form-control" />
+                <textarea asp-for="Attending_Foodpref" class="form-control"></textarea>
                 <span asp-validation-for="Attending_Foodpref" class="text-danger"></span>
             </div>
             <div class="form-group">
