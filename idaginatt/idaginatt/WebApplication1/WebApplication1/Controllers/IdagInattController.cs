@@ -213,10 +213,15 @@ namespace WebApplication1.Controllers
             ud.LogInErrorMessage = error;
             return View("AdminLogin", ud);
         }
-
+        [HttpGet]
         public IActionResult Attend()
         {
+            return View();
+        }
 
+        [HttpPost]
+        public IActionResult Attend(AttendingDetail ad)
+        {
             return View();
         }
 
