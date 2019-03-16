@@ -125,16 +125,37 @@ namespace WebApplication1.Controllers
             ViewBag.error = error;
             return RedirectToAction("NomineesToVoteOn");
         }
+
+
+        [HttpGet]
         public IActionResult NomineeScore()
         {
-            VoteMethod vm = new VoteMethod();
+            List<NomineeDetail> NomineeList = new List<NomineeDetail>();  
             NomineeMethod nm = new NomineeMethod();
-            ViewModelIPA myModel = new ViewModelIPA()
-            {
-                NomineeLista = nm.GetNomineeList(out string msg1),
-                VoteLista = vm.GetVoteList(out string msg2)
-            };
-            return View(myModel);
+
+            NomineeList = nm.GetNomineeList(out string msg1);
+                     
+            return View(NomineeList);
+        }
+        [HttpPost]
+        public IActionResult NomineeScore(string ByYear)
+        {
+            int i = Convert.ToInt32(ByYear);
+            List<NomineeDetail> NomineeList = new List<NomineeDetail>();
+            NomineeMethod nm = new NomineeMethod();
+            NomineeList = nm.GetNomineeListByYear(i, out string error);
+            ViewData["ByYear"] = ByYear;
+            return View(NomineeList);
+        }
+        public IActionResult Motivations(int id)
+        {
+            NomineeMethod nm = new NomineeMethod();
+            NomineeDetail nd = nm.GetNomineeById(id, out string errormsg);
+            List<VoteDetail> voteList = new List<VoteDetail>();
+            VoteMethod vm = new VoteMethod();
+            voteList = vm.GetMotivationListById(id, out string msg);
+            ViewBag.Name = nd.Nominee_FirstName+ " " + nd.Nominee_LastName;
+            return View(voteList);
         }
         public IActionResult Admin()
         {
