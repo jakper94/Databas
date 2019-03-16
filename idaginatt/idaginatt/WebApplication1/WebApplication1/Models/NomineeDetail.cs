@@ -16,7 +16,9 @@ namespace WebApplication1.Models
         public string Nominee_FirstName { get; set; }
         [DisplayName("Efternamn")]
         public string Nominee_LastName { get; set; }
+        [DisplayName("Bild")]
         public string Nominee_ImgLink { get; set; }
+        [DisplayName("Antal röster")]
         public int Nominee_Votes { get; set; }
         [DisplayName("År")]
         public int Nominee_Year { get; set; }
