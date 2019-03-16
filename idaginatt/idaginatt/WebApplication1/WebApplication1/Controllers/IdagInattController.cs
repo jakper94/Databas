@@ -174,5 +174,11 @@ namespace WebApplication1.Controllers
             return View("AdminLogin", ud);
         }
 
+        public IActionResult Attend()
+        {
+
+            return View();
+        }
+
     }
 }
