@@ -19,7 +19,6 @@ namespace WebApplication1.Models
         public string Nominee_ImgLink { get; set; }
         public int Nominee_Votes { get; set; }
         [DisplayName("År")]
-
         public int Nominee_Year { get; set; }
     }
 }

@@ -11,38 +11,14 @@
 
 @{
     int i = 0;
-    if (ViewData["BYear"] != null) { i = (int)ViewData["Year"]; }
+    if (ViewData["ByYear"] != null) { i = (int)ViewData["ByYear"]; }
     string s = @ViewBag.message;
     if (@ViewBag.message != null)
     {
 
     }
 }
-<div class="row">
-    <div class="form-group col-md-4">
-        <form asp-action="Filter">
-            <div class="form-group">
-                <select class="form-control" id="ByYear" name="ByYear">
 
-                    @foreach (var item in Model)
-                    {
-                        @if (item.Nominee_Id != i)
-                        {
-                            <option value="item.nominee_Year"> @item.Nominee_Year</option>
-                        }
-                        else
-                        {
-                            <option value="item.nominee_Year" Selected> @item.Nominee_Year</option>
-                        }
-                    }
-                </select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Filtrera" class="btn btn-default" />
-            </div>
-        </form>
-    </div>
-</div>
 <table class="table">
     <thead>
         <tr>
@@ -52,26 +28,27 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nominee_Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nominee_FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nominee_LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nominee_ImgLink)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nominee_Year)
-                </td>
-                <td>
-                    <a asp-action="Motivations" asp-route-id="@item.Nominee_Id">Motivation</a>
-                </td>
-            </tr>
+        <tr>
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.Nominee_FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nominee_LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nominee_ImgLink)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nominee_Year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nominee_Votes)
+            </td>
+            <td>
+                <a asp-action="Motivations" asp-route-id="@item.Nominee_Id">Motivation</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

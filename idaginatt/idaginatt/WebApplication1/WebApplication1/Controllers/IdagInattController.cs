@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
+using System.Web;
 
 namespace WebApplication1.Controllers
 {
@@ -35,6 +37,7 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
+       
         [HttpPost]
         public IActionResult InsertNominee(NomineeDetail nd)
         {
@@ -133,7 +136,7 @@ namespace WebApplication1.Controllers
             List<NomineeDetail> NomineeList = new List<NomineeDetail>();  
             NomineeMethod nm = new NomineeMethod();
 
-            NomineeList = nm.GetNomineeList(out string msg1);
+            NomineeList = nm.GetNomineeListWithVotes(out string msg1);
                      
             return View(NomineeList);
         }
@@ -143,7 +146,7 @@ namespace WebApplication1.Controllers
             int i = Convert.ToInt32(ByYear);
             List<NomineeDetail> NomineeList = new List<NomineeDetail>();
             NomineeMethod nm = new NomineeMethod();
-            NomineeList = nm.GetNomineeListByYear(i, out string error);
+            NomineeList = nm.GetNomineeListWithVotes(out string error);
             ViewData["ByYear"] = ByYear;
             return View(NomineeList);
         }
@@ -154,7 +157,7 @@ namespace WebApplication1.Controllers
             List<VoteDetail> voteList = new List<VoteDetail>();
             VoteMethod vm = new VoteMethod();
             voteList = vm.GetMotivationListById(id, out string msg);
-            ViewBag.Name = nd.Nominee_FirstName+ " " + nd.Nominee_LastName;
+            ViewBag.Name = nd.Nominee_FirstName + " " + nd.Nominee_LastName;
             return View(voteList);
         }
         public IActionResult Admin()
