@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 
+
 namespace WebApplication1.Controllers
 {
     public class IdagInattController : Controller
@@ -164,6 +165,8 @@ namespace WebApplication1.Controllers
             string error = "";
             if (um.LogIn(ud.User_UserName, ud.User_Password, out error) == true)
             {
+                HttpContext.Session.SetString("UserID", ud.User_FirstName);
+                string strUID = HttpContext.Session.GetString("UserID");
                 return View("Index");
             }
             ud.LogInErrorMessage = error;
