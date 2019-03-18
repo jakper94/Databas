@@ -21,7 +21,15 @@ namespace WebApplication1.Models
             SqlCommand dbCommand = new SqlCommand(sqlString, dbConnection);
 
             dbCommand.Parameters.Add("Attending_User", SqlDbType.NChar, 8).Value = ad.Attending_User;
-            dbCommand.Parameters.Add("Attending_Foodpref", SqlDbType.NVarChar).Value = ad.Attending_Foodpref;
+            string foodpref;
+            if(ad.Attending_Foodpref == null)
+            {
+                foodpref = "";
+            } else
+            {
+                foodpref = ad.Attending_Foodpref;
+            }
+            dbCommand.Parameters.Add("Attending_Foodpref", SqlDbType.NVarChar).Value = foodpref;
             dbCommand.Parameters.Add("Attending_Year", SqlDbType.Int).Value = ad.Attending_Year;
 
 

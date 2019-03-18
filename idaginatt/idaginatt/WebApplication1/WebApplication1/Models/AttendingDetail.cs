@@ -21,6 +21,7 @@ namespace WebApplication1.Models
         public string Attending_Class { get; set; }
         [DisplayName("Allergier")]
         public string Attending_Foodpref { get; set; }
+        [DisplayName("År")]
         public int Attending_Year { get; set; }
 
         public AttendingDetail() {}
