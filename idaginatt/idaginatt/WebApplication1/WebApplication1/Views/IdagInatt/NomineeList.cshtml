@@ -52,19 +52,9 @@
                 <td>
                     <a asp-action="EditNominee" asp-route-id="@item.Nominee_Id">Edit</a> |
                     <a asp-action="NomineeDetails" asp-route-id="@item.Nominee_Id">Details</a> |
-                    <a asp-action="NomineeDelete" asp-route-id="@item.Nominee_Id">Delete</a>
+                    <a asp-action="DeleteNominee" asp-route-id="@item.Nominee_Id">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
-</table>
-
-
-<h2>Välj vilka nominerade som ska visas.</h2>
-<h3>Just nu visas @ViewBag.year</h3>
-@using (Html.BeginForm())
-{
-    <p>
-        Året som ska visas: @Html.TextBox("year") <br />
-    </p>
-}       
+</table>    

@@ -9,60 +9,85 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 using System.Web;
 using Microsoft.IdentityModel.Protocols;
+using Microsoft.Extensions.FileProviders;
+using Fiver.Mvc.FileUpload.Models.IdagInatt;
+
 
 namespace WebApplication1.Controllers
 {
     public class IdagInattController : Controller
     {
+        private readonly IFileProvider fileProvider;
         int tempID;
+        public IdagInattController(IFileProvider fileProvider)
+        {
+            this.fileProvider = fileProvider;
+        }
         public IActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
 
             return View();
         }
         [HttpGet]
         public IActionResult InsertNominee()
         {
+            
             return View();
         }
     
-    [HttpPost]
-        public IActionResult InsertNominee(NomineeDetail nd)
+        [HttpPost]
+        public async Task<IActionResult> InsertNominee(NomineeDetail nd, IFormFile file)
         {
-          
-                NomineeMethod nm = new NomineeMethod();
+            if (file == null || file.Length == 0)
+                return Content("file not selected");
+
+            var path = Path.Combine(
+                        Directory.GetCurrentDirectory(), "wwwroot/images",
+                        file.GetFilename());
+            string s = "/images/" + file.GetFilename();
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+            NomineeMethod nm = new NomineeMethod();
                 int i = 0;
                 string error = "";
-                i = nm.InsertNominee(nd, out error);
+                i = nm.InsertNominee(nd,s, out error);
                 ViewBag.error = error;
                 
                 return RedirectToAction("NomineeList"); 
             
         }
+        public IActionResult UploadSite(int id)
+        {
 
-        public IActionResult NomineeList(int year) { 
+
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> UploadSite(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return Content("file not selected");
+
+            var path = Path.Combine(
+                        Directory.GetCurrentDirectory(), "wwwroot/images",
+                        file.GetFilename());
+            string s = "wwwroot/images/" + file.GetFilename();
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+            
+            return View();
+        }
+
+        public IActionResult NomineeList() { 
             List<NomineeDetail> NomineeList = new List<NomineeDetail>();
             NomineeMethod nm = new NomineeMethod();
             string error = "";
             NomineeList = nm.GetNomineeList(out error);
             ViewBag.error = error;
-            if(year != 0) {
-            HttpContext.Session.SetInt32("year", year);
-            }
-            ViewBag.year = Convert.ToInt32(HttpContext.Session.GetInt32("year"));
             return View(NomineeList);
         }
       
@@ -97,14 +122,25 @@ namespace WebApplication1.Controllers
 
         public IActionResult NomineesToVoteOn()
         {
-            int year = Convert.ToInt32(HttpContext.Session.GetInt32("year"));
+            ViewBag.Name = HttpContext.Session.GetString("UserID");
 
-            List<NomineeDetail> NomineeList = new List<NomineeDetail>();
-            NomineeMethod nm = new NomineeMethod();
-            string error = "";
-            NomineeList = nm.GetNomineeListByYear(year,out error);
-            ViewBag.error = error;
-            return View(NomineeList);
+            if (ViewBag.Name != null)
+            {
+                int year = DateTime.Now.Year;
+
+                List<NomineeDetail> NomineeList = new List<NomineeDetail>();
+                NomineeMethod nm = new NomineeMethod();
+                string error = "";
+                NomineeList = nm.GetNomineeListByYear(year, out error);
+                ViewBag.error = error;
+                return View(NomineeList);
+            }
+
+            else
+            {
+                HttpContext.Session.SetString("fromWhere", "FromVoteOn");
+                return View("Login");
+            }
         }
 
         [HttpGet]
@@ -114,9 +150,12 @@ namespace WebApplication1.Controllers
             NomineeDetail nd = nm.GetNomineeById(id, out string errormsg);
             ViewBag.Name = nd.Nominee_FirstName + nd.Nominee_LastName;
             tempID = nd.Nominee_Id;
+            ViewBag.image = nd.Nominee_ImgLink;
             ViewBag.voteId = tempID;
             HttpContext.Session.SetInt32("extraInfo",tempID);
+
             return View();
+
         }
         [HttpPost]
         public IActionResult VoteSite(VoteDetail vd)
@@ -187,13 +226,26 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult Login(UserDetail ud)
         {
+           
             UserMethod um = new UserMethod();
             string error = "";
             if (um.LogIn(ud.User_UserName, out error) == true)
             {
-                return View("Index");
+                HttpContext.Session.SetString("UserID", ud.User_UserName);
+                if (HttpContext.Session.GetString("fromWhere") == "FromVoteOn")
+                {
+                    return RedirectToAction("NomineesToVoteOn");
+                }
+                else
+                {
+
+                    return View("Index");
+                    
+                }
+               
             }
             ud.LogInErrorMessage = error;
+           
             return View("Login", ud);
         }
 
@@ -206,11 +258,12 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult AdminLogin(UserDetail ud)
         {
+           
             UserMethod um = new UserMethod();
             string error = "";
             if (um.AdminLogIn(ud.User_UserName, ud.User_Password, out error) == true)
             {
-                return View("Index");
+                return View("Admin");
             }
             ud.LogInErrorMessage = error;
             return View("AdminLogin", ud);

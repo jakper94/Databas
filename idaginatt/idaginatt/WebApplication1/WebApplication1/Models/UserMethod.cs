@@ -131,7 +131,7 @@ namespace WebApplication1.Models
         {
             SqlConnection dbConnection = new SqlConnection();
             dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
-            string sqlstring = "UPDATE Tbl_User SET Us_FirstName = @firstName , Us_LastName = @lastName , Us_Class = @class, WHERE Us_UserName = @userName";
+            string sqlstring = "UPDATE Tbl_User SET Us_FirstName = @firstName, Us_LastName = @lastName, Us_Class = @class WHERE Us_UserName = @userName";
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
             dbCommand.Parameters.Add("userName", SqlDbType.NChar, 8).Value = ud.User_UserName;
             dbCommand.Parameters.Add("firstName", SqlDbType.NVarChar, 20).Value = ud.User_FirstName;
