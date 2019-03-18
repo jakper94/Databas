@@ -122,6 +122,7 @@ namespace WebApplication1.Controllers
         public IActionResult NomineesToVoteOn()
         {
             ViewBag.Name = HttpContext.Session.GetString("UserID");
+
             if (ViewBag.Name != null)
             {
                 int year = DateTime.Now.Year;
@@ -133,7 +134,12 @@ namespace WebApplication1.Controllers
                 ViewBag.error = error;
                 return View(NomineeList);
             }
-            else return View("Login");
+
+            else
+            {
+                HttpContext.Session.SetString("fromWhere", "FromVoteOn");
+                return View("Login");
+            }
         }
 
         [HttpGet]
@@ -219,14 +225,26 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult Login(UserDetail ud)
         {
+           
             UserMethod um = new UserMethod();
             string error = "";
             if (um.LogIn(ud.User_UserName, out error) == true)
             {
                 HttpContext.Session.SetString("UserID", ud.User_UserName);
-                return View("Index");
+                if (HttpContext.Session.GetString("fromWhere") == "FromVoteOn")
+                {
+                    return RedirectToAction("NomineesToVoteOn");
+                }
+                else
+                {
+
+                    return View("Index");
+                    
+                }
+               
             }
             ud.LogInErrorMessage = error;
+           
             return View("Login", ud);
         }
 
@@ -239,6 +257,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult AdminLogin(UserDetail ud)
         {
+           
             UserMethod um = new UserMethod();
             string error = "";
             if (um.AdminLogIn(ud.User_UserName, ud.User_Password, out error) == true)
