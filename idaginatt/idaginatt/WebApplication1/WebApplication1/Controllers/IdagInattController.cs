@@ -210,6 +210,7 @@ namespace WebApplication1.Controllers
                 return View("Login");
             }
             return View();
+
         }
         [HttpPost]
         public IActionResult VoteSite(VoteDetail vd)
@@ -284,7 +285,7 @@ namespace WebApplication1.Controllers
             string error = "";
             if (um.LogIn(ud.User_UserName, out error) == true)
             {
-                HttpContext.Session.SetString("UserID", ud.User_FirstName);
+                HttpContext.Session.SetString("UserID", ud.User_UserName);
                 return View("Index");
             }
             ud.LogInErrorMessage = error;
