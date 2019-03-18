@@ -6,6 +6,8 @@
 
 <h2>Rösta på</h2>
 <h3>@ViewBag.Name</h3>
+<br />
+<img src="@ViewBag.image" style="width: 30%; " />
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -17,6 +19,7 @@
                 <span asp-validation-for="Vote_Motivation" class="text-danger"></span>
 
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Rösta" class="btn btn-default" />
             </div>

@@ -44,7 +44,7 @@ namespace WebApplication1.Controllers
             var path = Path.Combine(
                         Directory.GetCurrentDirectory(), "wwwroot/images",
                         file.GetFilename());
-            string s = "wwwroot/images/" + file.GetFilename();
+            string s = "/images/" + file.GetFilename();
             using (var stream = new FileStream(path, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
@@ -82,16 +82,12 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        public IActionResult NomineeList(int year) { 
+        public IActionResult NomineeList() { 
             List<NomineeDetail> NomineeList = new List<NomineeDetail>();
             NomineeMethod nm = new NomineeMethod();
             string error = "";
             NomineeList = nm.GetNomineeList(out error);
             ViewBag.error = error;
-            if(year != 0) {
-            HttpContext.Session.SetInt32("year", year);
-            }
-            ViewBag.year = Convert.ToInt32(HttpContext.Session.GetInt32("year"));
             return View(NomineeList);
         }
       
@@ -128,7 +124,7 @@ namespace WebApplication1.Controllers
             ViewBag.Name = HttpContext.Session.GetString("UserID");
             if (ViewBag.Name != null)
             {
-                int year = Convert.ToInt32(HttpContext.Session.GetInt32("year"));
+                int year = DateTime.Now.Year;
 
                 List<NomineeDetail> NomineeList = new List<NomineeDetail>();
                 NomineeMethod nm = new NomineeMethod();
@@ -147,6 +143,7 @@ namespace WebApplication1.Controllers
             NomineeDetail nd = nm.GetNomineeById(id, out string errormsg);
             ViewBag.Name = nd.Nominee_FirstName + nd.Nominee_LastName;
             tempID = nd.Nominee_Id;
+            ViewBag.image = nd.Nominee_ImgLink;
             ViewBag.voteId = tempID;
             HttpContext.Session.SetInt32("extraInfo",tempID);
 
