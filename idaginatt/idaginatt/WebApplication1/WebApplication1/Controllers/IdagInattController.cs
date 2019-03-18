@@ -9,37 +9,32 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 using System.Web;
 using Microsoft.IdentityModel.Protocols;
+using Microsoft.Extensions.FileProviders;
+using Fiver.Mvc.FileUpload.Models.IdagInatt;
 
 namespace WebApplication1.Controllers
 {
     public class IdagInattController : Controller
     {
+        private readonly IFileProvider fileProvider;
         int tempID;
+        public IdagInattController(IFileProvider fileProvider)
+        {
+            this.fileProvider = fileProvider;
+        }
         public IActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
 
             return View();
         }
         [HttpGet]
         public IActionResult InsertNominee()
         {
+            
             return View();
         }
     
-    [HttpPost]
+        [HttpPost]
         public IActionResult InsertNominee(NomineeDetail nd)
         {
           
@@ -51,6 +46,99 @@ namespace WebApplication1.Controllers
                 
                 return RedirectToAction("NomineeList"); 
             
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadFile(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return Content("file not selected");
+
+            var path = Path.Combine(
+                        Directory.GetCurrentDirectory(), "wwwroot/images",
+                        file.GetFilename());
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return RedirectToAction("Files");
+        }
+
+        [HttpPost]
+       
+        [HttpPost]
+        public async Task<IActionResult> UploadFileViaModel(FileInputModel model)
+        {
+            if (model == null ||
+                model.FileToUpload == null || model.FileToUpload.Length == 0)
+                return Content("file not selected");
+
+            var path = Path.Combine(
+                        Directory.GetCurrentDirectory(), "wwwroot/images",
+                        model.FileToUpload.GetFilename());
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await model.FileToUpload.CopyToAsync(stream);
+            }
+
+            return RedirectToAction("Files");
+        }
+
+        public IActionResult Files()
+        {
+            var model = new FilesViewModel();
+            foreach (var item in this.fileProvider.GetDirectoryContents(""))
+            {
+                model.Files.Add(
+                    new FileDetails { Name = item.Name, Path = item.PhysicalPath });
+            }
+            return View(model);
+        }
+
+        public async Task<IActionResult> Download(string filename)
+        {
+            if (filename == null)
+                return Content("filename not present");
+
+            var path = Path.Combine(
+                           Directory.GetCurrentDirectory(),
+                           "wwwroot", filename);
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            return File(memory, GetContentType(path), Path.GetFileName(path));
+        }
+
+        private string GetContentType(string path)
+        {
+            var types = GetMimeTypes();
+            var ext = Path.GetExtension(path).ToLowerInvariant();
+            return types[ext];
+        }
+
+        private Dictionary<string, string> GetMimeTypes()
+        {
+            return new Dictionary<string, string>
+            {
+                {".txt", "text/plain"},
+                {".pdf", "application/pdf"},
+                {".doc", "application/vnd.ms-word"},
+                {".docx", "application/vnd.ms-word"},
+                {".xls", "application/vnd.ms-excel"},
+                {".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
+                {".png", "image/png"},
+                {".jpg", "image/jpeg"},
+                {".jpeg", "image/jpeg"},
+                {".gif", "image/gif"},
+                {".csv", "text/csv"}
+            };
         }
 
         public IActionResult NomineeList(int year) { 
