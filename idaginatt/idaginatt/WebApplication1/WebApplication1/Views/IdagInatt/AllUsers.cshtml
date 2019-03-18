@@ -1,0 +1,59 @@
+﻿@model IEnumerable<WebApplication1.Models.UserDetail>
+
+@{
+    ViewData["Title"] = "AllUsers";
+}
+
+<h2>AddAdmin</h2>
+
+<p>
+    error message: @ViewBag.error; 
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.User_UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User_FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User_LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User_Class)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User_IsAdmin)
+            </th>
+          
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.User_UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User_FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User_LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User_Class)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User_IsAdmin)
+            </td>
+            <td>
+                @Html.ActionLink("Gör till Admin", "MakeAdmin", new {  username=item.User_UserName }) |
+                @Html.ActionLink("Ta bort som Admin", "RemoveAdmin", new {  username=item.User_UserName }) 
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

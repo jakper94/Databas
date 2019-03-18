@@ -94,6 +94,7 @@ namespace WebApplication1.Controllers
 
             return View(nd);
         }
+
         public IActionResult NomineesToVoteOn()
         {
             int year = Convert.ToInt32(HttpContext.Session.GetInt32("year"));
@@ -105,6 +106,7 @@ namespace WebApplication1.Controllers
             ViewBag.error = error;
             return View(NomineeList);
         }
+
         [HttpGet]
         public IActionResult VoteSite(int id)
         {
@@ -251,6 +253,41 @@ namespace WebApplication1.Controllers
             string error = "";
             AttendingList = am.GetAttendingList(out error);
             return View(AttendingList);
+        }
+
+        
+        public IActionResult AllUsers()
+        {
+            List<UserDetail> userList = new List<UserDetail>();
+            UserMethod um = new UserMethod();
+
+            string error = "";
+
+            userList = um.SelectUsers(out error);
+
+            ViewBag.error = error; 
+
+            return View(userList);
+        }
+
+        public IActionResult MakeAdmin(string username)
+        {
+            UserMethod um = new UserMethod();
+            um.MakeUserAdmin(username, out string errormsg);
+
+            ViewData["error"] = errormsg;
+     
+            return View(); 
+        }
+
+        public IActionResult RemoveAdmin(string username)
+        {
+            UserMethod um = new UserMethod();
+            um.DeleteAdmin(username, out string errormsg);
+
+            ViewData["error"] = errormsg;
+
+            return View();
         }
 
     }
