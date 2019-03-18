@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 using System.Web;
+using Microsoft.IdentityModel.Protocols;
 
 namespace WebApplication1.Controllers
 {
@@ -37,8 +38,8 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
-       
-        [HttpPost]
+    
+    [HttpPost]
         public IActionResult InsertNominee(NomineeDetail nd)
         {
           
