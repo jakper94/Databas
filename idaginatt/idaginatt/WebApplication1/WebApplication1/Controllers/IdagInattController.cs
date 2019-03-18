@@ -125,15 +125,21 @@ namespace WebApplication1.Controllers
         }
         public IActionResult NomineesToVoteOn()
         {
-            int year = Convert.ToInt32(HttpContext.Session.GetInt32("year"));
+            ViewBag.Name = HttpContext.Session.GetString("UserID");
+            if (ViewBag.Name != null)
+            {
+                int year = Convert.ToInt32(HttpContext.Session.GetInt32("year"));
 
-            List<NomineeDetail> NomineeList = new List<NomineeDetail>();
-            NomineeMethod nm = new NomineeMethod();
-            string error = "";
-            NomineeList = nm.GetNomineeListByYear(year,out error);
-            ViewBag.error = error;
-            return View(NomineeList);
+                List<NomineeDetail> NomineeList = new List<NomineeDetail>();
+                NomineeMethod nm = new NomineeMethod();
+                string error = "";
+                NomineeList = nm.GetNomineeListByYear(year, out error);
+                ViewBag.error = error;
+                return View(NomineeList);
+            }
+            else return View("Login");
         }
+
         [HttpGet]
         public IActionResult VoteSite(int id)
         {
@@ -143,7 +149,9 @@ namespace WebApplication1.Controllers
             tempID = nd.Nominee_Id;
             ViewBag.voteId = tempID;
             HttpContext.Session.SetInt32("extraInfo",tempID);
+
             return View();
+
         }
         [HttpPost]
         public IActionResult VoteSite(VoteDetail vd)
@@ -218,8 +226,7 @@ namespace WebApplication1.Controllers
             string error = "";
             if (um.LogIn(ud.User_UserName, out error) == true)
             {
-                HttpContext.Session.SetString("UserID", ud.User_FirstName);
-                string strUID = HttpContext.Session.GetString("UserID");
+                HttpContext.Session.SetString("UserID", ud.User_UserName);
                 return View("Index");
             }
             ud.LogInErrorMessage = error;
@@ -239,7 +246,7 @@ namespace WebApplication1.Controllers
             string error = "";
             if (um.AdminLogIn(ud.User_UserName, ud.User_Password, out error) == true)
             {
-                return View("Index");
+                return View("Admin");
             }
             ud.LogInErrorMessage = error;
             return View("AdminLogin", ud);
