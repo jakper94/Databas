@@ -1,5 +1,4 @@
-﻿@model IEnumerable<WebApplication1.Models.ViewModelIPA>
-
+﻿@model IEnumerable<WebApplication1.Models.NomineeDetail>
 @{
     ViewData["Title"] = "NomineeScore";
 }
@@ -9,20 +8,63 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+@{
+    int i = 0;
+    if (ViewData["ByYear"] != null) { i = (int)ViewData["ByYear"]; }
+    string s = @ViewBag.message;
+    if (@ViewBag.message != null)
+    {
+
+    }
+}
+
 <table class="table">
     <thead>
         <tr>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nominee_FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nominee_LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nominee_ImgLink)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nominee_Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nominee_Votes)
+
+            </th>
         </tr>
     </thead>
     <tbody>
-        @foreach (WebApplication1.Models.NomineeDetail nominee in Model.NomineeList)
+        @foreach (var item in Model)
         {
             <tr>
-                <td>@nominee.FirstName</td>
-                <td>@PlayerTeam.LastName</td>
-                <td>@PlayerTeam.PlaysInTeam</td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nominee_FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nominee_LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nominee_ImgLink)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nominee_Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nominee_Votes)
+                </td>
+                <td>
+                    <a asp-action="Motivations" asp-route-id="@item.Nominee_Id">Motivation</a>
+                </td>
             </tr>
         }
     </tbody>
 </table>
+<a asp-action="NomineeList">Redigera listan med deltagare</a>

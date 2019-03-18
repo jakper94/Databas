@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
+using System.Web;
+using Microsoft.IdentityModel.Protocols;
 
 
 namespace WebApplication1.Controllers
@@ -36,7 +39,8 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
-        [HttpPost]
+    
+    [HttpPost]
         public IActionResult InsertNominee(NomineeDetail nd)
         {
           
@@ -126,16 +130,37 @@ namespace WebApplication1.Controllers
             ViewBag.error = error;
             return RedirectToAction("NomineesToVoteOn");
         }
+
+
+        [HttpGet]
         public IActionResult NomineeScore()
         {
-            VoteMethod vm = new VoteMethod();
+            List<NomineeDetail> NomineeList = new List<NomineeDetail>();  
             NomineeMethod nm = new NomineeMethod();
-            ViewModelIPA myModel = new ViewModelIPA()
-            {
-                NomineeLista = nm.GetNomineeList(out string msg1),
-                VoteLista = vm.GetVoteList(out string msg2)
-            };
-            return View(myModel);
+
+            NomineeList = nm.GetNomineeListWithVotes(out string msg1);
+                     
+            return View(NomineeList);
+        }
+        [HttpPost]
+        public IActionResult NomineeScore(string ByYear)
+        {
+            int i = Convert.ToInt32(ByYear);
+            List<NomineeDetail> NomineeList = new List<NomineeDetail>();
+            NomineeMethod nm = new NomineeMethod();
+            NomineeList = nm.GetNomineeListWithVotes(out string error);
+            ViewData["ByYear"] = ByYear;
+            return View(NomineeList);
+        }
+        public IActionResult Motivations(int id)
+        {
+            NomineeMethod nm = new NomineeMethod();
+            NomineeDetail nd = nm.GetNomineeById(id, out string errormsg);
+            List<VoteDetail> voteList = new List<VoteDetail>();
+            VoteMethod vm = new VoteMethod();
+            voteList = vm.GetMotivationListById(id, out string msg);
+            ViewBag.Name = nd.Nominee_FirstName + " " + nd.Nominee_LastName;
+            return View(voteList);
         }
         public IActionResult Admin()
         {
@@ -163,7 +188,7 @@ namespace WebApplication1.Controllers
         {
             UserMethod um = new UserMethod();
             string error = "";
-            if (um.LogIn(ud.User_UserName, ud.User_Password, out error) == true)
+            if (um.LogIn(ud.User_UserName, out error) == true)
             {
                 HttpContext.Session.SetString("UserID", ud.User_FirstName);
                 string strUID = HttpContext.Session.GetString("UserID");
@@ -184,12 +209,51 @@ namespace WebApplication1.Controllers
         {
             UserMethod um = new UserMethod();
             string error = "";
-            if (um.LogIn(ud.User_UserName, ud.User_Password, out error) == true)
+            if (um.AdminLogIn(ud.User_UserName, ud.User_Password, out error) == true)
             {
                 return View("Index");
             }
             ud.LogInErrorMessage = error;
             return View("AdminLogin", ud);
+        }
+
+        [HttpGet]
+        public IActionResult Attend()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Attend(AttendingDetail ad)
+        {
+            string error = "";
+            AttendingMethod am = new AttendingMethod();
+            UserMethod um = new UserMethod();
+            UserDetail ud = new UserDetail();
+            ad.Attending_Year = DateTime.Now.Year;
+            ud.User_UserName = ad.Attending_User;
+            ud.User_FirstName = ad.Attending_Firstname;
+            ud.User_LastName = ad.Attending_Lastname;
+            ud.User_Class = ad.Attending_Class;
+
+            um.UpdateUserInfo(ud, out error);
+            am.InsertAttending(ad, out error);
+
+            return RedirectToAction("AttendingConfirmed",ad);
+        }
+
+        public IActionResult AttendingConfirmed(AttendingDetail ad)
+        {
+            return View(ad);
+        }
+
+        public IActionResult ViewAttending()
+        {
+            List<AttendingDetail> AttendingList = new List<AttendingDetail>();
+            AttendingMethod am = new AttendingMethod();
+            string error = "";
+            AttendingList = am.GetAttendingList(out error);
+            return View(AttendingList);
         }
 
     }
