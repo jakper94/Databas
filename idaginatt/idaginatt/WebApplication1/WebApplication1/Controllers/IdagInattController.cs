@@ -115,6 +115,12 @@ namespace WebApplication1.Controllers
             tempID = nd.Nominee_Id;
             ViewBag.voteId = tempID;
             HttpContext.Session.SetInt32("extraInfo",tempID);
+
+            ViewBag.Name = HttpContext.Session.GetString("UserID");
+            if (ViewBag.Name = null)
+            {
+                return View("Login");
+            }
             return View();
         }
         [HttpPost]
@@ -191,7 +197,6 @@ namespace WebApplication1.Controllers
             if (um.LogIn(ud.User_UserName, out error) == true)
             {
                 HttpContext.Session.SetString("UserID", ud.User_FirstName);
-                string strUID = HttpContext.Session.GetString("UserID");
                 return View("Index");
             }
             ud.LogInErrorMessage = error;
