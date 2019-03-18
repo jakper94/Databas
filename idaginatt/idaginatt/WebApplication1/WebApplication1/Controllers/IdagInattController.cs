@@ -299,7 +299,7 @@ namespace WebApplication1.Controllers
             string error = "";
             if (um.AdminLogIn(ud.User_UserName, ud.User_Password, out error) == true)
             {
-                return View("Index");
+                return View("Admin");
             }
             ud.LogInErrorMessage = error;
             return View("AdminLogin", ud);
