@@ -36,21 +36,7 @@ namespace WebApplication1.Controllers
         }
     
         [HttpPost]
-        public IActionResult InsertNominee(NomineeDetail nd)
-        {
-          
-                NomineeMethod nm = new NomineeMethod();
-                int i = 0;
-                string error = "";
-                i = nm.InsertNominee(nd, out error);
-                ViewBag.error = error;
-                
-                return RedirectToAction("NomineeList"); 
-            
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UploadFile(IFormFile file)
+        public async Task<IActionResult> InsertNominee(NomineeDetail nd, IFormFile file)
         {
             if (file == null || file.Length == 0)
                 return Content("file not selected");
@@ -58,88 +44,42 @@ namespace WebApplication1.Controllers
             var path = Path.Combine(
                         Directory.GetCurrentDirectory(), "wwwroot/images",
                         file.GetFilename());
-
+            string s = "wwwroot/images/" + file.GetFilename();
             using (var stream = new FileStream(path, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
             }
-
-            return RedirectToAction("Files");
+            NomineeMethod nm = new NomineeMethod();
+                int i = 0;
+                string error = "";
+                i = nm.InsertNominee(nd,s, out error);
+                ViewBag.error = error;
+                
+                return RedirectToAction("NomineeList"); 
+            
         }
-
-        [HttpPost]
-       
-        [HttpPost]
-        public async Task<IActionResult> UploadFileViaModel(FileInputModel model)
+        public IActionResult UploadSite(int id)
         {
-            if (model == null ||
-                model.FileToUpload == null || model.FileToUpload.Length == 0)
+
+
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> UploadSite(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
                 return Content("file not selected");
 
             var path = Path.Combine(
                         Directory.GetCurrentDirectory(), "wwwroot/images",
-                        model.FileToUpload.GetFilename());
-
+                        file.GetFilename());
+            string s = "wwwroot/images/" + file.GetFilename();
             using (var stream = new FileStream(path, FileMode.Create))
             {
-                await model.FileToUpload.CopyToAsync(stream);
+                await file.CopyToAsync(stream);
             }
-
-            return RedirectToAction("Files");
-        }
-
-        public IActionResult Files()
-        {
-            var model = new FilesViewModel();
-            foreach (var item in this.fileProvider.GetDirectoryContents(""))
-            {
-                model.Files.Add(
-                    new FileDetails { Name = item.Name, Path = item.PhysicalPath });
-            }
-            return View(model);
-        }
-
-        public async Task<IActionResult> Download(string filename)
-        {
-            if (filename == null)
-                return Content("filename not present");
-
-            var path = Path.Combine(
-                           Directory.GetCurrentDirectory(),
-                           "wwwroot", filename);
-
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(path, FileMode.Open))
-            {
-                await stream.CopyToAsync(memory);
-            }
-            memory.Position = 0;
-            return File(memory, GetContentType(path), Path.GetFileName(path));
-        }
-
-        private string GetContentType(string path)
-        {
-            var types = GetMimeTypes();
-            var ext = Path.GetExtension(path).ToLowerInvariant();
-            return types[ext];
-        }
-
-        private Dictionary<string, string> GetMimeTypes()
-        {
-            return new Dictionary<string, string>
-            {
-                {".txt", "text/plain"},
-                {".pdf", "application/pdf"},
-                {".doc", "application/vnd.ms-word"},
-                {".docx", "application/vnd.ms-word"},
-                {".xls", "application/vnd.ms-excel"},
-                {".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
-                {".png", "image/png"},
-                {".jpg", "image/jpeg"},
-                {".jpeg", "image/jpeg"},
-                {".gif", "image/gif"},
-                {".csv", "text/csv"}
-            };
+            
+            return View();
         }
 
         public IActionResult NomineeList(int year) { 

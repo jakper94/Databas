@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="InsertNominee">
+        <form asp-action="InsertNominee" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
@@ -24,27 +24,17 @@
                 <span asp-validation-for="Nominee_LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-               
-                <label asp-for="Nominee_ImgLink" class="control-label"></label>
-                <input asp-for="Nominee_ImgLink" class="form-control" />
-                <span asp-validation-for="Nominee_ImgLink" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Nominee_Year" class="control-label"></label>
-                <input asp-for="Nominee_Year" class="form-control" />
-                <span asp-validation-for="Nominee_Year" class="text-danger"></span>
-            </div>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <label asp-for="Nominee_ImgLink" class="control-label"></label>
+                <input type="file" name="file" />
             </div>
+         
+                <input type="submit" value="Create" class="btn btn-default" />
+            
         </form>
     </div>
 </div>
- <form asp-controller="IdagInatt" asp-action="UploadFile" method="post" enctype="multipart/form-data">
-                    <input type="file" name="file" />
-                    <button type"submit">Upload File</button>
-                </form>
+ 
 <div>
     <a asp-action="NomineeList">Back to List</a>
 </div>

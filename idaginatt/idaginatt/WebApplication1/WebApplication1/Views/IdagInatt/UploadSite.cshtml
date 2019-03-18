@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewData["Title"] = "UploadSite";
+}
+
+<h2>UploadSite</h2>
+<form asp-controller="IdagInatt" asp-action="UploadSite" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <button type"submit">Upload File</button>
+</form>
