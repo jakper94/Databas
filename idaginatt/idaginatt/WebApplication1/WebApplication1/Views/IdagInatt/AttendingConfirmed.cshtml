@@ -1,0 +1,47 @@
+﻿@model WebApplication1.Models.AttendingDetail
+
+@{
+    ViewData["Title"] = "AttendingConfirmed";
+}
+
+<h2>Anmälan till IDag</h2>
+
+<div>
+    <h4>Du är nu anmäld till IDag!</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Attending_User)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Attending_User)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Attending_Firstname)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Attending_Firstname)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Attending_Lastname)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Attending_Lastname)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Attending_Class)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Attending_Class)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Attending_Foodpref)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Attending_Foodpref)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

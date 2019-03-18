@@ -186,7 +186,7 @@ namespace WebApplication1.Controllers
         {
             UserMethod um = new UserMethod();
             string error = "";
-            if (um.LogIn(ud.User_UserName, ud.User_Password, out error) == true)
+            if (um.LogIn(ud.User_UserName, out error) == true)
             {
                 return View("Index");
             }
@@ -205,13 +205,14 @@ namespace WebApplication1.Controllers
         {
             UserMethod um = new UserMethod();
             string error = "";
-            if (um.LogIn(ud.User_UserName, ud.User_Password, out error) == true)
+            if (um.AdminLogIn(ud.User_UserName, ud.User_Password, out error) == true)
             {
                 return View("Index");
             }
             ud.LogInErrorMessage = error;
             return View("AdminLogin", ud);
         }
+
         [HttpGet]
         public IActionResult Attend()
         {
@@ -221,7 +222,34 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult Attend(AttendingDetail ad)
         {
-            return View();
+            string error = "";
+            AttendingMethod am = new AttendingMethod();
+            UserMethod um = new UserMethod();
+            UserDetail ud = new UserDetail();
+            ad.Attending_Year = DateTime.Now.Year;
+            ud.User_UserName = ad.Attending_User;
+            ud.User_FirstName = ad.Attending_Firstname;
+            ud.User_LastName = ad.Attending_Lastname;
+            ud.User_Class = ad.Attending_Class;
+
+            um.UpdateUserInfo(ud, out error);
+            am.InsertAttending(ad, out error);
+
+            return RedirectToAction("AttendingConfirmed",ad);
+        }
+
+        public IActionResult AttendingConfirmed(AttendingDetail ad)
+        {
+            return View(ad);
+        }
+
+        public IActionResult ViewAttending()
+        {
+            List<AttendingDetail> AttendingList = new List<AttendingDetail>();
+            AttendingMethod am = new AttendingMethod();
+            string error = "";
+            AttendingList = am.GetAttendingList(out error);
+            return View(AttendingList);
         }
 
     }

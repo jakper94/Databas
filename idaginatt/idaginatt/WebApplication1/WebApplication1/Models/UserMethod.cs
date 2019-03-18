@@ -43,7 +43,7 @@ namespace WebApplication1.Models
             }
         }
 
-        public bool LogIn(string userName, string password, out string errormsg)
+        public bool LogIn(string userName, out string errormsg)
         {
             SqlConnection dbConnection = new SqlConnection();
 
@@ -99,18 +99,18 @@ namespace WebApplication1.Models
                 bool isAdmin = reader["Us_IsAdmin"] as bool? ?? false;
                 reader.Close();
 
-                if (corr_password.Equals(password))
+                if (isAdmin)
                 {
-                    if (isAdmin)
+                    if (corr_password.Equals(password))
                     {
                         return true;
                     }
-                    errormsg = "You do not have admin access.";
+                    errormsg = "The password is incorrect.";
                     return false;
                 }
                 else
                 {
-                    errormsg = "The password is incorrect.";
+                    errormsg = "You do not have admin access.";
                     return false;
                 }
             }
