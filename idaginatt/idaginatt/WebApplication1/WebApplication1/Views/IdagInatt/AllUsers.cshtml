@@ -3,11 +3,17 @@
 @{
     ViewData["Title"] = "AllUsers";
 }
+<br />
+<a asp-action="NomineeList" class="btn btn-default" style="color: white;background-color: black; font-weight:bolder; ">Redigera listan med Nominerade</a>
+<a asp-action="NomineeScore" class="btn btn-default" style="color: white;background-color: black;font-weight:bolder; ">Resultat från röstning</a>
+<a asp-action="InsertNominee" class="btn btn-default" style="color: white;background-color: black;font-weight:bolder; ">Lägg till Nominerade</a>
+<a asp-action="ViewAttending" class="btn btn-default" style="color: white;background-color: black;font-weight:bolder; ">Visa anmälningar</a>
+<a asp-action="AllUsers" class="btn btn-default" style="color: white;background-color: gray;font-weight:bolder; ">Visa användare</a>
 
 <h2>AddAdmin</h2>
 
 <p>
-    error message: @ViewBag.error; 
+    error message: @ViewBag.error;
 </p>
 <table class="table">
     <thead>
@@ -27,33 +33,34 @@
             <th>
                 @Html.DisplayNameFor(model => model.User_IsAdmin)
             </th>
-          
+
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.User_UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User_FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User_LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User_Class)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User_IsAdmin)
-            </td>
-            <td>
-                @Html.ActionLink("Gör till admin", "MakeAdmin", new {  username=item.User_UserName }) |
-                @Html.ActionLink("Ta bort som admin", "RemoveAdmin", new {  username=item.User_UserName }) 
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User_UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User_FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User_LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User_Class)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User_IsAdmin)
+                </td>
+                <td>
+                    @Html.ActionLink("Gör till admin", "MakeAdmin", new { username = item.User_UserName }) |
+                    @Html.ActionLink("Ta bort som admin", "RemoveAdmin", new { username = item.User_UserName })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

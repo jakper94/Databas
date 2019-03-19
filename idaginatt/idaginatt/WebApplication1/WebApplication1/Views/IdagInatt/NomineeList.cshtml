@@ -8,57 +8,67 @@
 <a asp-action="NomineeScore" class="btn btn-default" style="color: white;background-color: black;font-weight:bolder; ">Resultat från röstning</a>
 <a asp-action="InsertNominee" class="btn btn-default" style="color: white;background-color: black;font-weight:bolder; ">Lägg till Nominerade</a>
 <a asp-action="ViewAttending" class="btn btn-default" style="color: white;background-color: black;font-weight:bolder; ">Visa anmälningar</a>
-    <h2>NomineeList</h2>
+<a asp-action="AllUsers" class="btn btn-default" style="color: white;background-color: black;font-weight:bolder; ">Visa användare</a>
+<a asp-action="AllUsers" class="btn btn-default" style="color: white;background-color: black;font-weight:bolder; ">Visa användare</a>
 
+
+<h2>Lista med de nominerade</h2>
+
+<p>
+    <a asp-action="InsertNominee">Lägg till en nominerad.</a>
+</p>
+@using (Html.BeginForm())
+{
     <p>
-        <a asp-action="InsertNominee">Lägg till en nominerad.</a>
+        Sortera efter år: @Html.TextBox("År") <br />
     </p>
-    <table class="table">
-        <thead>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nominee_Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nominee_FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nominee_LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nominee_ImgLink)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nominee_Year)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Nominee_Id)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Nominee_FirstName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Nominee_LastName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Nominee_ImgLink)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Nominee_Year)
-                </th>
-                <th></th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nominee_Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nominee_FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nominee_LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nominee_ImgLink)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nominee_Year)
+                </td>
+                <td>
+                    <a asp-action="EditNominee" asp-route-id="@item.Nominee_Id">Edit</a> |
+                    <a asp-action="NomineeDetails" asp-route-id="@item.Nominee_Id">Details</a> |
+                    <a asp-action="DeleteNominee" asp-route-id="@item.Nominee_Id">Delete</a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Nominee_Id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Nominee_FirstName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Nominee_LastName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Nominee_ImgLink)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Nominee_Year)
-                    </td>
-                    <td>
-                        <a asp-action="EditNominee" asp-route-id="@item.Nominee_Id">Edit</a> |
-                        <a asp-action="NomineeDetails" asp-route-id="@item.Nominee_Id">Details</a> |
-                        <a asp-action="DeleteNominee" asp-route-id="@item.Nominee_Id">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>
