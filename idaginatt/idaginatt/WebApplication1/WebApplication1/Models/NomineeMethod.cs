@@ -112,6 +112,7 @@ namespace WebApplication1.Models
                 nd.Nominee_FirstName = myDS.Tables["MyNominee"].Rows[i]["Nom_FirstName"].ToString();
                 nd.Nominee_LastName = myDS.Tables["MyNominee"].Rows[i]["Nom_LastName"].ToString();
                 nd.Nominee_ImgLink = myDS.Tables["MyNominee"].Rows[i]["Nom_ImgLink"].ToString();
+                nd.Nominee_Year = Convert.ToInt16(myDS.Tables["MyNominee"].Rows[i]["Nom_Year"]);
 
 
 
@@ -128,18 +129,20 @@ namespace WebApplication1.Models
                 dbConnection.Close();
             }
 
+        
         }
         
         public int UpdateNominee(NomineeDetail nd, out string errormsg)
         {
             SqlConnection dbConnection = new SqlConnection();
             dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
-            string sqlstring = "UPDATE Tbl_Nominee SET Nom_FirstName= @firstName , Nom_LastName= @lastName , Nom_Votes = @votes, Nom_ImgLink = @imgLink WHERE Nom_Id = @nomineeId";
+            string sqlstring = "UPDATE Tbl_Nominee SET Nom_FirstName = @firstName , Nom_LastName = @lastName, Nom_ImgLink = @imgLink, Nom_Year = @year WHERE Nom_Id = @nomineeId";
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
             dbCommand.Parameters.Add("nomineeId", SqlDbType.Int).Value = nd.Nominee_Id;
             dbCommand.Parameters.Add("firstName", SqlDbType.NVarChar, 30).Value = nd.Nominee_FirstName;
             dbCommand.Parameters.Add("lastName", SqlDbType.NVarChar, 30).Value = nd.Nominee_LastName;
             dbCommand.Parameters.Add("imgLink", SqlDbType.NVarChar, 30).Value = nd.Nominee_ImgLink;
+            dbCommand.Parameters.Add("year", SqlDbType.Int).Value = nd.Nominee_Year;
 
             try
             {

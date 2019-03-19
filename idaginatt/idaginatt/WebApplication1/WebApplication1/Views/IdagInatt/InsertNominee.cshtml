@@ -3,6 +3,11 @@
 @{
     ViewData["Title"] = "InsertNominee";
 }
+<br />
+<a asp-action="NomineeList" class="btn btn-default" style="color: white;background-color: black; font-weight:bolder; ">Redigera listan med Nominerade</a>
+<a asp-action="NomineeScore" class="btn btn-default" style="color: white;background-color: black;font-weight:bolder; ">Resultat från röstning</a>
+<a asp-action="InsertNominee" class="btn btn-default" style="color: white;background-color: gray;font-weight:bolder; ">Lägg till Nominerade</a>
+<a asp-action="ViewAttending" class="btn btn-default" style="color: white;background-color: black;font-weight:bolder; ">Visa anmälningar</a>
 
 <h2>InsertNominee</h2>
 
@@ -28,13 +33,13 @@
                 <label asp-for="Nominee_ImgLink" class="control-label"></label>
                 <input type="file" name="file" />
             </div>
-         
-                <input type="submit" value="Create" class="btn btn-default" />
-            
+
+            <input type="submit" value="Create" class="btn btn-default" />
+
         </form>
     </div>
 </div>
- 
+
 <div>
     <a asp-action="NomineeList">Back to List</a>
 </div>
