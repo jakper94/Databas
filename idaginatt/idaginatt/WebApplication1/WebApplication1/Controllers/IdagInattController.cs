@@ -135,6 +135,7 @@ namespace WebApplication1.Controllers
 
             return View(nd);
         }
+
         public IActionResult NomineesToVoteOn()
         {
             ViewBag.Name = HttpContext.Session.GetString("UserID");
@@ -321,6 +322,41 @@ namespace WebApplication1.Controllers
             string error = "";
             AttendingList = am.GetAttendingList(out error);
             return View(AttendingList);
+        }
+
+        
+        public IActionResult AllUsers()
+        {
+            List<UserDetail> userList = new List<UserDetail>();
+            UserMethod um = new UserMethod();
+
+            string error = "";
+
+            userList = um.SelectUsers(out error);
+
+            ViewBag.error = error; 
+
+            return View(userList);
+        }
+
+        public IActionResult MakeAdmin(string username)
+        {
+            UserMethod um = new UserMethod();
+            um.MakeUserAdmin(username, out string errormsg);
+
+            ViewData["error"] = errormsg;
+     
+            return View(); 
+        }
+
+        public IActionResult RemoveAdmin(string username)
+        {
+            UserMethod um = new UserMethod();
+            um.DeleteAdmin(username, out string errormsg);
+
+            ViewData["error"] = errormsg;
+
+            return View();
         }
 
     }
