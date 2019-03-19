@@ -359,10 +359,10 @@ namespace WebApplication1.Controllers
             return View(userList);
         }
 
-        public IActionResult MakeAdmin(string username)
+        public IActionResult MakeAdmin(string username, string password)
         {
             UserMethod um = new UserMethod();
-            um.MakeUserAdmin(username, out string errormsg);
+            um.MakeUserAdmin(username, password, out string errormsg);
 
             ViewData["error"] = errormsg;
      

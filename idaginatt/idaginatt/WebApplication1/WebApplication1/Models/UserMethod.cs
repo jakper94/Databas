@@ -241,7 +241,7 @@ namespace WebApplication1.Models
 
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
 
-            dbCommand.Parameters.Add("User_Password", SqlDbType.NVarChar, 20).Value = password;
+            dbCommand.Parameters.Add("password", SqlDbType.NVarChar, 20).Value = password;
 
 
             errormsg = "";
