@@ -11,7 +11,8 @@ namespace WebApplication1.Models
     {
         [Key]
         public int Attending_Id { get; set; }
-        [Required]
+        
+        [Required, DisplayName("Användarnamn")]
         public string Attending_User { get; set; }
         [Required, DisplayName("Förnamn")]
         public string Attending_Firstname { get; set; }

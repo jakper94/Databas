@@ -304,6 +304,7 @@ namespace WebApplication1.Controllers
         {
             if (HttpContext.Session.GetString("UserID") != null)
             {
+                
                 return View();
             }
             else

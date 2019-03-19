@@ -97,5 +97,50 @@ namespace WebApplication1.Models
                 dbConnection.Close();
             }
         }
+        public UserDetail GetAttendByUserName(string username, out string errormsg)
+        {
+            //sakapa SqlConnection
+            SqlConnection dbConnection = new SqlConnection();
+            //Koppling mot SQL  Server
+            dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
+
+            //Sqlstring för att hämta alla personer
+            string sqlstring = "Select * From Tbl_User Where Us_UserName = @user";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+            dbCommand.Parameters.Add("user", SqlDbType.Int).Value = username;
+            //skapa en adapter
+            SqlDataAdapter myAdapter = new SqlDataAdapter(dbCommand);
+            DataSet myDS = new DataSet();
+
+
+            try
+            {
+                dbConnection.Open();
+                myAdapter.Fill(myDS, "MyUser");
+                int i = 0;
+                UserDetail ud = new UserDetail();
+                ud.User_Id= Convert.ToInt16(myDS.Tables["MyUser"].Rows[i]["Us_UserName"]);
+                ud.User_FirstName = myDS.Tables["MyUser"].Rows[i]["Us_FirstName"].ToString();
+                ud.User_LastName = myDS.Tables["MyUser"].Rows[i]["Us_LastName"].ToString();
+                
+               
+
+
+
+                errormsg = "";
+                return ud;
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+
+
+        }
     }
 }
