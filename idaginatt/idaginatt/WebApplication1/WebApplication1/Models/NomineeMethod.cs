@@ -195,9 +195,9 @@ namespace WebApplication1.Models
             SqlConnection dbConnection = new SqlConnection();
             dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
 
-            string sqlstring = "Select * From Tbl_Nominee Where Nom_Year = @year";
+            string sqlstring = "Select * From Tbl_Nominee Where Nom_Year = @Year";
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
-            dbCommand.Parameters.Add("year", SqlDbType.Int).Value = year;
+            dbCommand.Parameters.Add("Year", SqlDbType.Int).Value = year;
 
             SqlDataReader reader = null;
 

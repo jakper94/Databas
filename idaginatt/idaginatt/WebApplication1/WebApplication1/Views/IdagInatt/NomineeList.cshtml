@@ -9,7 +9,6 @@
 <a asp-action="InsertNominee" class="btn btn-default" style="color: white;background-color: black;font-weight:bolder; ">Lägg till Nominerade</a>
 <a asp-action="ViewAttending" class="btn btn-default" style="color: white;background-color: black;font-weight:bolder; ">Visa anmälningar</a>
 <a asp-action="AllUsers" class="btn btn-default" style="color: white;background-color: black;font-weight:bolder; ">Visa användare</a>
-<a asp-action="AllUsers" class="btn btn-default" style="color: white;background-color: black;font-weight:bolder; ">Visa användare</a>
 
 
 <h2>Lista med de nominerade</h2>
@@ -20,7 +19,7 @@
 @using (Html.BeginForm())
 {
     <p>
-        Sortera efter år: @Html.TextBox("År") <br />
+        Sortera efter år: @Html.TextBox("year") <br />
     </p>
 }
 <table class="table">

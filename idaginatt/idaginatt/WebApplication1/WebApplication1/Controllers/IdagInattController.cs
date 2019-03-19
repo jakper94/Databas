@@ -98,6 +98,7 @@ namespace WebApplication1.Controllers
             i = nm.UpdateNominee(nd, out error);
             return RedirectToAction("NomineeList");
         }
+        [HttpGet]
         public IActionResult NomineeList() { 
             List<NomineeDetail> NomineeList = new List<NomineeDetail>();
             NomineeMethod nm = new NomineeMethod();
@@ -106,7 +107,16 @@ namespace WebApplication1.Controllers
             ViewBag.error = error;
             return View(NomineeList);
         }
-      
+        [HttpPost]
+        public IActionResult NomineeList(string year)
+        {
+            List<NomineeDetail> NomineeList = new List<NomineeDetail>();
+            NomineeMethod nm = new NomineeMethod();
+            string error = "";
+            NomineeList = nm.GetNomineeListByYear(Convert.ToInt16(year),out error);
+            ViewBag.error = error;
+            return View(NomineeList);
+        }
 
         [HttpGet]
         public IActionResult DeleteNominee(int id)
