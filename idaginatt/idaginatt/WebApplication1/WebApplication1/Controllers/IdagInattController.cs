@@ -262,6 +262,7 @@ namespace WebApplication1.Controllers
             string error = "";
             if (um.AdminLogIn(ud.User_UserName, ud.User_Password, out error) == true)
             {
+                HttpContext.Session.SetString("AdminID", ud.User_Password);
                 return View("Admin");
             }
             ud.LogInErrorMessage = error;
@@ -300,11 +301,20 @@ namespace WebApplication1.Controllers
 
         public IActionResult ViewAttending()
         {
-            List<AttendingDetail> AttendingList = new List<AttendingDetail>();
-            AttendingMethod am = new AttendingMethod();
-            string error = "";
-            AttendingList = am.GetAttendingList(out error);
-            return View(AttendingList);
+            ViewBag.Name = HttpContext.Session.GetString("AdminID");
+
+            if (ViewBag.Name != null)
+            {
+                List<AttendingDetail> AttendingList = new List<AttendingDetail>();
+                AttendingMethod am = new AttendingMethod();
+                string error = "";
+                AttendingList = am.GetAttendingList(out error);
+                return View(AttendingList);
+            }
+            else
+            {
+                return View("AdminLogin");
+            }
         }
 
     }
