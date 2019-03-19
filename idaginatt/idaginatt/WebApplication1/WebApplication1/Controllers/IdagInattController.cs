@@ -275,6 +275,14 @@ namespace WebApplication1.Controllers
             return View("Login", ud);
         }
 
+        public IActionResult LogOut()
+        {
+
+
+            HttpContext.Session.Clear();
+            return View();
+        }
+
         [HttpGet]
         public IActionResult AdminLogin()
         {
