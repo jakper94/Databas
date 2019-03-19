@@ -379,6 +379,21 @@ namespace WebApplication1.Controllers
             return View(userList);
         }
 
+        [HttpGet]
+        public IActionResult AddUser()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddUser(UserDetail ud)
+        {
+            string error = "";
+            UserMethod um = new UserMethod();
+            um.InsertUser(ud, out error);
+            return RedirectToAction("AllUsers");
+        }
+
         public IActionResult MakeAdmin(string username, string password)
         {
             UserMethod um = new UserMethod();
