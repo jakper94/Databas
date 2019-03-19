@@ -139,8 +139,9 @@ namespace WebApplication1.Controllers
         public IActionResult NomineesToVoteOn()
         {
             ViewBag.Name = HttpContext.Session.GetString("UserID");
+            ViewBag.Admin = HttpContext.Session.GetString("AdminID");
 
-            if (ViewBag.Name != null)
+            if (ViewBag.Name != null || ViewBag.Admin != null)
             {
                 int year = DateTime.Now.Year;
 
@@ -318,9 +319,9 @@ namespace WebApplication1.Controllers
 
         public IActionResult ViewAttending()
         {
-            ViewBag.Name = HttpContext.Session.GetString("AdminID");
+            ViewBag.Admin = HttpContext.Session.GetString("AdminID");
 
-            if (ViewBag.Name != null)
+            if (ViewBag.Admin != null)
             {
                 List<AttendingDetail> AttendingList = new List<AttendingDetail>();
                 AttendingMethod am = new AttendingMethod();
