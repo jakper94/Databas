@@ -119,7 +119,7 @@ namespace WebApplication1.Models
                 myAdapter.Fill(myDS, "MyUser");
                 int i = 0;
                 UserDetail ud = new UserDetail();
-                ud.User_Id= Convert.ToInt16(myDS.Tables["MyUser"].Rows[i]["Us_UserName"]);
+                ud.User_UserName= myDS.Tables["MyUser"].Rows[i]["Us_UserName"].ToString();
                 ud.User_FirstName = myDS.Tables["MyUser"].Rows[i]["Us_FirstName"].ToString();
                 ud.User_LastName = myDS.Tables["MyUser"].Rows[i]["Us_LastName"].ToString();
                 
