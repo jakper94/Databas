@@ -262,13 +262,12 @@ namespace WebApplication1.Controllers
                 {
                     return RedirectToAction("NomineesToVoteOn");
                 }
-                else
+                else if (HttpContext.Session.GetString("fromWhere") == "attend")
                 {
-
-                    return View("Index");
-                    
+                    return RedirectToAction("Attend");  
                 }
-               
+                else return View("Index");
+
             }
             ud.LogInErrorMessage = error;
            
@@ -278,9 +277,11 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult AdminLogin()
         {
-            return View();
-        }
+         
+                return View();
 
+          
+        }
         [HttpPost]
         public IActionResult AdminLogin(UserDetail ud)
         {
@@ -291,6 +292,7 @@ namespace WebApplication1.Controllers
             {
                 HttpContext.Session.SetString("AdminID", ud.User_Password);
                 return View("Admin");
+
             }
             ud.LogInErrorMessage = error;
             return View("AdminLogin", ud);
@@ -299,7 +301,15 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult Attend()
         {
-            return View();
+            if (HttpContext.Session.GetString("UserID") != null)
+            {
+                return View();
+            }
+            else
+            {
+                HttpContext.Session.SetString("fromWhere", "attend");
+                return RedirectToAction("login");
+            }
         }
 
         [HttpPost]
