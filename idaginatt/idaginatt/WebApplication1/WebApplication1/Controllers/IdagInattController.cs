@@ -149,8 +149,9 @@ namespace WebApplication1.Controllers
         public IActionResult NomineesToVoteOn()
         {
             ViewBag.Name = HttpContext.Session.GetString("UserID");
+            ViewBag.Admin = HttpContext.Session.GetString("AdminID");
 
-            if (ViewBag.Name != null)
+            if (ViewBag.Name != null || ViewBag.Admin != null)
             {
                 int year = DateTime.Now.Year;
 
@@ -262,13 +263,12 @@ namespace WebApplication1.Controllers
                 {
                     return RedirectToAction("NomineesToVoteOn");
                 }
-                else
+                else if (HttpContext.Session.GetString("fromWhere") == "attend")
                 {
-
-                    return View("Index");
-                    
+                    return RedirectToAction("Attend");  
                 }
-               
+                else return View("Index");
+
             }
             ud.LogInErrorMessage = error;
            
@@ -278,9 +278,11 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult AdminLogin()
         {
-            return View();
-        }
+         
+                return View();
 
+          
+        }
         [HttpPost]
         public IActionResult AdminLogin(UserDetail ud)
         {
@@ -291,6 +293,7 @@ namespace WebApplication1.Controllers
             {
                 HttpContext.Session.SetString("AdminID", ud.User_Password);
                 return View("Admin");
+
             }
             ud.LogInErrorMessage = error;
             return View("AdminLogin", ud);
@@ -299,7 +302,16 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult Attend()
         {
-            return View();
+            if (HttpContext.Session.GetString("UserID") != null)
+            {
+                
+                return View();
+            }
+            else
+            {
+                HttpContext.Session.SetString("fromWhere", "attend");
+                return RedirectToAction("login");
+            }
         }
 
         [HttpPost]
@@ -328,9 +340,9 @@ namespace WebApplication1.Controllers
 
         public IActionResult ViewAttending()
         {
-            ViewBag.Name = HttpContext.Session.GetString("AdminID");
+            ViewBag.Admin = HttpContext.Session.GetString("AdminID");
 
-            if (ViewBag.Name != null)
+            if (ViewBag.Admin != null)
             {
                 List<AttendingDetail> AttendingList = new List<AttendingDetail>();
                 AttendingMethod am = new AttendingMethod();
