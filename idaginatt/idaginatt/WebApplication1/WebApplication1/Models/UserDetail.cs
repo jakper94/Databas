@@ -12,9 +12,9 @@ namespace WebApplication1.Models
         public UserDetail() { }
         [Key]
         public int User_Id { get; set; }
-        [Required, DisplayName("Username")]
+        [Required, DisplayName("Användarnamn")]
         public string User_UserName { get; set; }
-        [Required, DisplayName("Password"), DataType(DataType.Password)]
+        [Required, DisplayName("Lösenord"), DataType(DataType.Password)]
         public string User_Password { get; set; }
         
         public string User_FirstName { get; set; }
