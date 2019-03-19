@@ -39,7 +39,7 @@ namespace WebApplication1
                   Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromDays(30);
+                options.IdleTimeout = TimeSpan.FromMinutes(15);
                 options.Cookie.HttpOnly = true;
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

@@ -81,7 +81,23 @@ namespace WebApplication1.Controllers
             
             return View();
         }
-
+        [HttpGet]
+        public IActionResult EditNominee(int id)
+        {
+            NomineeMethod nm = new NomineeMethod();
+            NomineeDetail nd = new NomineeDetail();
+            nd = nm.GetNomineeById(id, out string errormsg);
+            return View(nd);
+        }
+        [HttpPost]
+        public IActionResult EditNominee(NomineeDetail nd)
+        {
+            NomineeMethod nm = new NomineeMethod();
+            string error = "";
+            int i = 0;
+            i = nm.UpdateNominee(nd, out error);
+            return RedirectToAction("NomineeList");
+        }
         public IActionResult NomineeList() { 
             List<NomineeDetail> NomineeList = new List<NomineeDetail>();
             NomineeMethod nm = new NomineeMethod();
