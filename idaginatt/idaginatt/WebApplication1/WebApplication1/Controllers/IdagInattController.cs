@@ -81,7 +81,23 @@ namespace WebApplication1.Controllers
             
             return View();
         }
-
+        [HttpGet]
+        public IActionResult EditNominee(int id)
+        {
+            NomineeMethod nm = new NomineeMethod();
+            NomineeDetail nd = new NomineeDetail();
+            nd = nm.GetNomineeById(id, out string errormsg);
+            return View(nd);
+        }
+        [HttpPost]
+        public IActionResult EditNominee(NomineeDetail nd)
+        {
+            NomineeMethod nm = new NomineeMethod();
+            string error = "";
+            int i = 0;
+            i = nm.UpdateNominee(nd, out error);
+            return RedirectToAction("NomineeList");
+        }
         public IActionResult NomineeList() { 
             List<NomineeDetail> NomineeList = new List<NomineeDetail>();
             NomineeMethod nm = new NomineeMethod();
@@ -119,6 +135,7 @@ namespace WebApplication1.Controllers
 
             return View(nd);
         }
+
         public IActionResult NomineesToVoteOn()
         {
             ViewBag.Name = HttpContext.Session.GetString("UserID");
@@ -315,6 +332,41 @@ namespace WebApplication1.Controllers
             {
                 return View("AdminLogin");
             }
+        }
+
+        
+        public IActionResult AllUsers()
+        {
+            List<UserDetail> userList = new List<UserDetail>();
+            UserMethod um = new UserMethod();
+
+            string error = "";
+
+            userList = um.SelectUsers(out error);
+
+            ViewBag.error = error; 
+
+            return View(userList);
+        }
+
+        public IActionResult MakeAdmin(string username)
+        {
+            UserMethod um = new UserMethod();
+            um.MakeUserAdmin(username, out string errormsg);
+
+            ViewData["error"] = errormsg;
+     
+            return View(); 
+        }
+
+        public IActionResult RemoveAdmin(string username)
+        {
+            UserMethod um = new UserMethod();
+            um.DeleteAdmin(username, out string errormsg);
+
+            ViewData["error"] = errormsg;
+
+            return View();
         }
 
     }

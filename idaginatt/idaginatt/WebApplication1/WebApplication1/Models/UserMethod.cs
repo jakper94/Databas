@@ -185,5 +185,101 @@ namespace WebApplication1.Models
                 dbConnection.Close();
             }
         }
+
+        public List<UserDetail> SelectUsers(out string errormsg)
+        {
+            SqlConnection dbConnection = new SqlConnection();
+
+            dbConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Idag_Inatt;Integrated Security=True";
+
+            String sqlString = "SELECT Us_UserName, Us_FirstName, Us_LastName, Us_IsAdmin, Us_Class FROM Tbl_User;";
+            SqlCommand dbCommand = new SqlCommand(sqlString, dbConnection);
+
+            SqlDataReader reader = null;
+
+            List<UserDetail> userList = new List<UserDetail>();
+
+            errormsg = ""; 
+
+            try
+            {
+                dbConnection.Open();
+                reader = dbCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    UserDetail user = new UserDetail();
+
+                    user.User_UserName = reader["Us_UserName"].ToString();
+                    user.User_FirstName = reader["Us_FirstName"].ToString();
+                    user.User_LastName = reader["Us_LastName"].ToString();
+                    user.User_Class = reader["Us_Class"].ToString();
+                    user.User_IsAdmin = Convert.ToBoolean(reader["Us_IsAdmin"]);
+
+                    userList.Add(user);
+                }
+                reader.Close();
+
+                return userList; 
+
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
+
+        public void MakeUserAdmin(string username, out string errormsg)
+        {
+            SqlConnection dbConnection = new SqlConnection();
+            dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
+            string sqlstring = "UPDATE Tbl_User SET Us_IsAdmin = 1 WHERE Us_UserName = '" + username + "';";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+            
+            errormsg = "";
+
+            try
+            {
+                dbConnection.Open();
+                dbCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
+
+        public void DeleteAdmin(string username, out string errormsg)
+        {
+            SqlConnection dbConnection = new SqlConnection();
+            dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
+            string sqlstring = "UPDATE Tbl_User SET Us_IsAdmin = 0 WHERE Us_UserName = '" + username + "';";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            errormsg = "";
+
+            try
+            {
+                dbConnection.Open();
+                dbCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
     }
 }
