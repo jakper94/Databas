@@ -17,11 +17,10 @@ namespace WebApplication1.Models
 
             dbConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Idag_Inatt;Integrated Security=True";
 
-            String sqlString = "INSERT INTO Tbl_User (Us_UserName, Us_Password) VALUES (@User_UserName, @User_Password)";
+            String sqlString = "INSERT INTO Tbl_User Us_UserName VALUES @User_UserName";
             SqlCommand dbCommand = new SqlCommand(sqlString, dbConnection);
 
             dbCommand.Parameters.Add("User_UserName", SqlDbType.NChar,8).Value = ud.User_UserName;
-            dbCommand.Parameters.Add("User_Password", SqlDbType.NChar, 10).Value = ud.User_Password;
 
             try
             {
@@ -234,13 +233,17 @@ namespace WebApplication1.Models
             }
         }
 
-        public void MakeUserAdmin(string username, out string errormsg)
+        public void MakeUserAdmin(string username, string password, out string errormsg)
         {
             SqlConnection dbConnection = new SqlConnection();
             dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
-            string sqlstring = "UPDATE Tbl_User SET Us_IsAdmin = 1 WHERE Us_UserName = '" + username + "';";
+            string sqlstring = "UPDATE Tbl_User SET Us_IsAdmin = 1, Us_Password = @password WHERE Us_UserName = '" + username + "';";
+
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
-            
+
+            dbCommand.Parameters.Add("User_Password", SqlDbType.NVarChar, 20).Value = password;
+
+
             errormsg = "";
 
             try
