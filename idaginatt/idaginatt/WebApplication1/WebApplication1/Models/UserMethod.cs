@@ -319,7 +319,7 @@ namespace WebApplication1.Models
         {
             SqlConnection dbConnection = new SqlConnection();
             dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
-            string sqlstring = "UPDATE Tbl_User SET Us_HasVoted = 1";
+            string sqlstring = "UPDATE Tbl_User SET Us_HasVoted = 0";
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
 
 

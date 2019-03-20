@@ -19,7 +19,7 @@ namespace WebApplication1.Controllers
     {
         private readonly IFileProvider fileProvider;
         int tempID;
-        bool votingOpen = true;
+        static bool votingOpen = true;
         public IdagInattController(IFileProvider fileProvider)
         {
             this.fileProvider = fileProvider;
@@ -492,6 +492,7 @@ namespace WebApplication1.Controllers
         public IActionResult CloseVoteConfirmed()
         {
             votingOpen = false;
+            ViewBag.voting = votingOpen;
             string error = "";
             UserMethod um = new UserMethod();
             um.resetVotes(out error);
@@ -507,6 +508,7 @@ namespace WebApplication1.Controllers
         public IActionResult OpenVote()
         {
             votingOpen = true;
+            ViewBag.voting = votingOpen;
             return RedirectToAction("NomineeScore");
         }
     }
