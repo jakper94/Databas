@@ -176,6 +176,7 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult VoteSite(int id)
         {
+
             NomineeMethod nm = new NomineeMethod();
             NomineeDetail nd = nm.GetNomineeById(id, out string errormsg);
             ViewBag.Name = nd.Nominee_FirstName + nd.Nominee_LastName;
@@ -198,6 +199,7 @@ namespace WebApplication1.Controllers
 
             i = vm.InsertVote(vd,temp, out error);
             ViewBag.error = error;
+            vote
             return RedirectToAction("NomineesToVoteOn");
         }
 
