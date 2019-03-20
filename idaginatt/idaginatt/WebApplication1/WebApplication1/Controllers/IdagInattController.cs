@@ -177,7 +177,6 @@ namespace WebApplication1.Controllers
                 else return View(NomineeList);
 
             }
-
             else
             {
                 HttpContext.Session.SetString("fromWhere", "FromVoteOn");
