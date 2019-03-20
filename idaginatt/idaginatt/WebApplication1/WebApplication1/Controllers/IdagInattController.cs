@@ -196,7 +196,9 @@ namespace WebApplication1.Controllers
 
             i = vm.InsertVote(vd,temp, out error);
             ViewBag.error = error;
-            vote
+            UserMethod um = new UserMethod();
+            UserDetail ud = um.GetUserByUserName(HttpContext.Session.GetString("UserID"),out string errormsg);
+            
             return RedirectToAction("NomineesToVoteOn");
         }
 
