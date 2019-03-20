@@ -310,7 +310,7 @@ namespace WebApplication1.Models
                 ud.User_UserName = myDS.Tables["MyUser"].Rows[i]["Us_UserName"].ToString();
                 ud.User_FirstName = myDS.Tables["MyUser"].Rows[i]["Us_FirstName"].ToString();
                 ud.User_LastName = myDS.Tables["MyUser"].Rows[i]["Us_LastName"].ToString();
-                ud.User_HasVoted = Convert.ToBoolean(myDS.Tables["MyUser"].Rows[i]["Us_HasVoted"]);
+                ud.User_HasVoted = myDS.Tables["MyUser"].Rows[i]["Us_HasVoted"] as bool? ?? false;
              
                 errormsg = "";
                 return ud;
@@ -343,6 +343,34 @@ namespace WebApplication1.Models
                 i = dbCommand.ExecuteNonQuery();
                 if (i == 1) { errormsg = ""; }
                 else { errormsg = "User not updated in database"; }
+                return (i);
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return 0;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
+
+        public int resetVotes(out string errormsg)
+        {
+            SqlConnection dbConnection = new SqlConnection();
+            dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
+            string sqlstring = "UPDATE Tbl_User SET Us_HasVoted = 1";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+
+            try
+            {
+                dbConnection.Open();
+                int i = 0;
+                i = dbCommand.ExecuteNonQuery();
+                if (i == 1) { errormsg = ""; }
+                else { errormsg = "Votes not reset in database"; }
                 return (i);
             }
             catch (Exception e)
