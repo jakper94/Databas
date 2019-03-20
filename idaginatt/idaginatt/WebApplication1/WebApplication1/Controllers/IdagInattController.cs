@@ -19,6 +19,7 @@ namespace WebApplication1.Controllers
     {
         private readonly IFileProvider fileProvider;
         int tempID;
+        bool votingOpen = true;
         public IdagInattController(IFileProvider fileProvider)
         {
             this.fileProvider = fileProvider;
@@ -151,6 +152,10 @@ namespace WebApplication1.Controllers
 
         public IActionResult NomineesToVoteOn()
         {
+            if(votingOpen == false)
+            {
+                return View("VotingClosed");
+            }
             ViewBag.Name = HttpContext.Session.GetString("UserID");
             ViewBag.Admin = HttpContext.Session.GetString("AdminID");
             if (ViewBag.Name != null || ViewBag.Admin != null)
@@ -239,7 +244,7 @@ namespace WebApplication1.Controllers
         {
             List<NomineeDetail> NomineeList = new List<NomineeDetail>();  
             NomineeMethod nm = new NomineeMethod();
-
+            ViewBag.voting = votingOpen;
             NomineeList = nm.GetNomineeListWithVotes(out string msg1);
                      
             return View(NomineeList);
@@ -250,6 +255,7 @@ namespace WebApplication1.Controllers
             int i = Convert.ToInt32(ByYear);
             List<NomineeDetail> NomineeList = new List<NomineeDetail>();
             NomineeMethod nm = new NomineeMethod();
+            ViewBag.voting = votingOpen;
             NomineeList = nm.GetNomineeListWithVotes(out string error);
             ViewData["ByYear"] = ByYear;
             return View(NomineeList);
@@ -456,5 +462,30 @@ namespace WebApplication1.Controllers
             return RedirectToAction("AllUsers");
         }
 
+        public IActionResult CloseVote()
+        {
+            return View();
+        }
+
+        public IActionResult CloseVoteConfirmed()
+        {
+            votingOpen = false;
+            string error = "";
+            UserMethod um = new UserMethod();
+            um.resetVotes(out error);
+            
+            return RedirectToAction("NomineeScore");
+        }
+
+        public IActionResult VotingClosed()
+        {
+            return View();
+        }
+
+        public IActionResult OpenVote()
+        {
+            votingOpen = true;
+            return RedirectToAction("NomineeScore");
+        }
     }
 }
