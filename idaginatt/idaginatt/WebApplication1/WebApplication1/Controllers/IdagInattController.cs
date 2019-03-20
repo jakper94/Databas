@@ -430,14 +430,21 @@ namespace WebApplication1.Controllers
             return RedirectToAction("AllUsers");
         }
 
-        public IActionResult MakeAdmin(string username, string password)
+        [HttpGet]
+        public IActionResult MakeAdmin(string username)
+        {
+            UserDetail ud = new UserDetail();
+            ud.User_UserName = username;
+            return View(ud);
+        }
+
+        [HttpPost]
+        public IActionResult MakeAdmin(UserDetail ud)
         {
             UserMethod um = new UserMethod();
-            um.MakeUserAdmin(username, password, out string errormsg);
+            um.MakeUserAdmin(ud.User_UserName, ud.User_Password, out string errormsg);
 
-            ViewData["error"] = errormsg;
-     
-            return View(); 
+            return RedirectToAction("AllUsers"); 
         }
 
         public IActionResult RemoveAdmin(string username)
@@ -447,7 +454,7 @@ namespace WebApplication1.Controllers
 
             ViewData["error"] = errormsg;
 
-            return View();
+            return RedirectToAction("AllUsers");
         }
 
     }
