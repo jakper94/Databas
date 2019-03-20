@@ -284,8 +284,6 @@ namespace WebApplication1.Controllers
 
         public IActionResult LogOut()
         {
-
-
             HttpContext.Session.Clear();
             return View();
         }
@@ -293,11 +291,9 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult AdminLogin()
         {
-         
-                return View();
-
-          
+            return View();
         }
+
         [HttpPost]
         public IActionResult AdminLogin(UserDetail ud)
         {
@@ -428,5 +424,31 @@ namespace WebApplication1.Controllers
             return RedirectToAction("AllUsers");
         }
 
+        [HttpGet]
+        public IActionResult RemoveUser(string id)
+        {
+            UserMethod um = new UserMethod();
+            UserDetail ud = new UserDetail();
+
+            ud = um.GetUserByUserName(id , out string errormsg); 
+            
+            ViewData["error"] = errormsg;
+
+            return View(ud); 
+        }
+
+        [HttpPost, ActionName("RemoveUser")]
+        public IActionResult ConfirmDelete(string id)
+        {
+
+            ViewData["username"] = id;
+
+            UserMethod um = new UserMethod();
+            um.DeleteUser(id, out string errormsg);
+
+            ViewData["error"] = errormsg; 
+
+            return RedirectToAction("AllUsers"); 
+        }
     }
 }

@@ -158,13 +158,13 @@ namespace WebApplication1.Models
 
         }
 
-        public int DeleteUser(string userName, out string errormsg)
+        public void DeleteUser(string userName, out string errormsg)
         {
             SqlConnection dbConnection = new SqlConnection();
             dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
-            string sqlstring = "DELETE FROM Tbl_User WHERE Us_UserName = @userName";
+            string sqlstring = "DELETE FROM Tbl_User WHERE Us_UserName = '" + userName + "';";
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
-            dbCommand.Parameters.Add("userName", SqlDbType.NChar,8).Value = userName;
+           
             try
             {
                 dbConnection.Open();
@@ -172,12 +172,12 @@ namespace WebApplication1.Models
                 i = dbCommand.ExecuteNonQuery();
                 if (i == 1) { errormsg = ""; }
                 else { errormsg = "User not removed from database"; }
-                return (i);
+               
             }
             catch (Exception e)
             {
                 errormsg = e.Message;
-                return 0;
+                
             }
             finally
             {
@@ -295,7 +295,7 @@ namespace WebApplication1.Models
             //Sqlstring för att hämta alla personer
             string sqlstring = "Select * From Tbl_User Where Us_UserName = @user";
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
-            dbCommand.Parameters.Add("user", SqlDbType.Int).Value = username;
+            dbCommand.Parameters.Add("user", SqlDbType.NChar,8).Value = username;
             //skapa en adapter
             SqlDataAdapter myAdapter = new SqlDataAdapter(dbCommand);
             DataSet myDS = new DataSet();
@@ -307,11 +307,12 @@ namespace WebApplication1.Models
                 myAdapter.Fill(myDS, "MyUser");
                 int i = 0;
                 UserDetail ud = new UserDetail();
+
                 ud.User_UserName = myDS.Tables["MyUser"].Rows[i]["Us_UserName"].ToString();
                 ud.User_FirstName = myDS.Tables["MyUser"].Rows[i]["Us_FirstName"].ToString();
                 ud.User_LastName = myDS.Tables["MyUser"].Rows[i]["Us_LastName"].ToString();
-                ud.User_HasVoted = Convert.ToBoolean(myDS.Tables["MyUser"].Rows[i]["Us_HasVoted"]);
-             
+                ud.User_Class = myDS.Tables["MyUser"].Rows[i]["Us_Class"].ToString();
+
                 errormsg = "";
                 return ud;
             }
@@ -324,7 +325,6 @@ namespace WebApplication1.Models
             {
                 dbConnection.Close();
             }
-
 
         }
     }
