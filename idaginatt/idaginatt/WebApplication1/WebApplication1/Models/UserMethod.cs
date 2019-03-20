@@ -237,11 +237,12 @@ namespace WebApplication1.Models
         {
             SqlConnection dbConnection = new SqlConnection();
             dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
-            string sqlstring = "UPDATE Tbl_User SET Us_IsAdmin = 1, Us_Password = @password WHERE Us_UserName = '" + username + "';";
+            string sqlstring = "UPDATE Tbl_User SET Us_IsAdmin = 1, Us_Password = @password WHERE Us_UserName = @username";
 
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
 
             dbCommand.Parameters.Add("password", SqlDbType.NVarChar, 20).Value = password;
+            dbCommand.Parameters.Add("username", SqlDbType.NChar, 8).Value = username;
 
 
             errormsg = "";
@@ -324,6 +325,35 @@ namespace WebApplication1.Models
                 dbConnection.Close();
             }
 
+
+        }
+        public int SetHasVotedToTrue(string userNameId, out string errormsg)
+        {
+            SqlConnection dbConnection = new SqlConnection();
+            dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
+            string sqlstring = "UPDATE Tbl_User SET Us_HasVoted = '1' WHERE Us_UserName = @userName";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+            dbCommand.Parameters.Add("userName", SqlDbType.NChar, 8).Value = userNameId;
+          
+
+            try
+            {
+                dbConnection.Open();
+                int i = 0;
+                i = dbCommand.ExecuteNonQuery();
+                if (i == 1) { errormsg = ""; }
+                else { errormsg = "User not updated in database"; }
+                return (i);
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return 0;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
 
         }
     }
