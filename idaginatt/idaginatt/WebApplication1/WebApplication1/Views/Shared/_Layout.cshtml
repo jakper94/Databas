@@ -35,10 +35,18 @@
                     <li><a asp-area="" asp-controller="IdagInatt" asp-action="Index">Hem</a></li>
                     <li><a asp-area="" asp-controller="IdagInatt" asp-action="Attend">Anmälan</a></li>
                     <li><a asp-area="" asp-controller="IdagInatt" asp-action="NomineesToVoteOn">Årets ID:are</a></li>
-                    <li><a asp-area="" asp-controller="IdagInatt" asp-action="Login">Logga in</a></li>
+
 
                     @{ViewBag.Name = Context.Session.GetString("UserID");}
+                    @{ViewBag.Admin = Context.Session.GetString("AdminID");}
+
+                    @if (ViewBag.Name == null && ViewBag.Admin == null)
+                    {
+                        <li><a asp-area="" asp-controller="IdagInatt" asp-action="Login">Logga in</a></li>
+                    }
+
                     @{ViewBag.Name = Context.Session.GetString("UserID");}
+                    @{ViewBag.Admin = Context.Session.GetString("AdminID");}
 
                     @if (ViewBag.Name != null || ViewBag.Admin != null)
                     {
