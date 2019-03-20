@@ -1,0 +1,45 @@
+﻿@model IEnumerable<WebApplication1.Models.NomineeDetail>
+@{
+    ViewData["Title"] = "AllNominees";
+}
+
+<h2>AllNominees</h2>
+
+
+<h2>Årets ideare som går att rösta på!</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Nominee_FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nominee_LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nominee_ImgLink)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nominee_FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nominee_LastName)
+                </td>
+                <td>
+                    <img src="@Html.DisplayFor(modelItem => item.Nominee_ImgLink)" style="width: 30%; " />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

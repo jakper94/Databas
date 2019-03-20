@@ -4,6 +4,7 @@
     ViewData["Title"] = "AddUser";
 }
 
+
 <h2>AddUser</h2>
 
 <h4>UserDetail</h4>
@@ -12,7 +13,7 @@
     <div class="col-md-4">
         <form asp-action="AddUser">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    
+
             <div class="form-group">
                 <label asp-for="User_UserName" class="control-label"></label>
                 <input asp-for="User_UserName" class="form-control" />

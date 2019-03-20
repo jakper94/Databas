@@ -19,6 +19,7 @@ namespace WebApplication1.Controllers
     {
         private readonly IFileProvider fileProvider;
         int tempID;
+        static bool votingOpen = true;
         public IdagInattController(IFileProvider fileProvider)
         {
             this.fileProvider = fileProvider;
@@ -31,14 +32,19 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult InsertNominee()
         {
-            
-            return View();
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                return View();
+            }
+                 else return RedirectToAction("AdminLogin");
         }
     
         [HttpPost]
         public async Task<IActionResult> InsertNominee(NomineeDetail nd, IFormFile file)
         {
-            if (file == null || file.Length == 0)
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                if (file == null || file.Length == 0)
                 return Content("file not selected");
 
             var path = Path.Combine(
@@ -55,76 +61,77 @@ namespace WebApplication1.Controllers
                 i = nm.InsertNominee(nd,s, out error);
                 ViewBag.error = error;
                 
-                return RedirectToAction("NomineeList"); 
-            
-        }
-        public IActionResult UploadSite(int id)
-        {
-
-
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> UploadSite(IFormFile file)
-        {
-            if (file == null || file.Length == 0)
-                return Content("file not selected");
-
-            var path = Path.Combine(
-                        Directory.GetCurrentDirectory(), "wwwroot/images",
-                        file.GetFilename());
-            string s = "wwwroot/images/" + file.GetFilename();
-            using (var stream = new FileStream(path, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
+                return RedirectToAction("NomineeList");
             }
-            
-            return View();
+            else return RedirectToAction("AdminLogin");
+
         }
+
+        
         [HttpGet]
         public IActionResult EditNominee(int id)
         {
-            NomineeMethod nm = new NomineeMethod();
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                NomineeMethod nm = new NomineeMethod();
             NomineeDetail nd = new NomineeDetail();
             nd = nm.GetNomineeById(id, out string errormsg);
             return View(nd);
         }
+            else return RedirectToAction("AdminLogin");
+    }
         [HttpPost]
         public IActionResult EditNominee(NomineeDetail nd)
         {
-            NomineeMethod nm = new NomineeMethod();
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                NomineeMethod nm = new NomineeMethod();
             string error = "";
             int i = 0;
             i = nm.UpdateNominee(nd, out error);
             return RedirectToAction("NomineeList");
+            }
+            else return RedirectToAction("AdminLogin");
         }
         [HttpGet]
-        public IActionResult NomineeList() { 
+        public IActionResult NomineeList() {
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
             List<NomineeDetail> NomineeList = new List<NomineeDetail>();
             NomineeMethod nm = new NomineeMethod();
             string error = "";
             NomineeList = nm.GetNomineeList(out error);
             ViewBag.error = error;
             return View(NomineeList);
+            }
+            else return RedirectToAction("AdminLogin");
         }
         [HttpPost]
         public IActionResult NomineeList(string year)
         {
-            List<NomineeDetail> NomineeList = new List<NomineeDetail>();
-            NomineeMethod nm = new NomineeMethod();
-            string error = "";
-            NomineeList = nm.GetNomineeListByYear(Convert.ToInt16(year),out error);
-            ViewBag.error = error;
-            return View(NomineeList);
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                List<NomineeDetail> NomineeList = new List<NomineeDetail>();
+                NomineeMethod nm = new NomineeMethod();
+                string error = "";
+                NomineeList = nm.GetNomineeListByYear(Convert.ToInt16(year), out error);
+                ViewBag.error = error;
+                return View(NomineeList);
+            }
+            else return RedirectToAction("AdminLogin");
         }
 
         [HttpGet]
         public IActionResult DeleteNominee(int id)
         {
-            NomineeMethod nm = new NomineeMethod();
-            NomineeDetail nd = new NomineeDetail();
-            nd = nm.GetNomineeById(id, out string errormsg);
-            return View(nd);
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                NomineeMethod nm = new NomineeMethod();
+                NomineeDetail nd = new NomineeDetail();
+                nd = nm.GetNomineeById(id, out string errormsg);
+                return View(nd);
+            }
+            else return RedirectToAction("AdminLogin");
         }
 
         [HttpPost, ActionName("DeleteNominee")]
@@ -151,21 +158,54 @@ namespace WebApplication1.Controllers
 
         public IActionResult NomineesToVoteOn()
         {
+            if(votingOpen == false)
+            {
+                return View("VotingClosed");
+            }
             ViewBag.Name = HttpContext.Session.GetString("UserID");
             ViewBag.Admin = HttpContext.Session.GetString("AdminID");
-
             if (ViewBag.Name != null || ViewBag.Admin != null)
             {
+               
                 int year = DateTime.Now.Year;
 
                 List<NomineeDetail> NomineeList = new List<NomineeDetail>();
                 NomineeMethod nm = new NomineeMethod();
+                UserMethod um = new UserMethod();
+                
+                string error = "";
+                NomineeList = nm.GetNomineeListByYear(year, out error);
+                ViewBag.error = error;
+                if (um.GetIfUserHasVooted(HttpContext.Session.GetString("UserID"),out string msg1))
+                {
+                    return RedirectToAction("AllNominees");
+                }
+                else return View(NomineeList);
+
+            }
+            else
+            {
+                HttpContext.Session.SetString("fromWhere", "FromVoteOn");
+                return View("Login");
+            }
+        }
+        public IActionResult AllNominees()
+        {
+            ViewBag.Name = HttpContext.Session.GetString("UserID");
+            ViewBag.Admin = HttpContext.Session.GetString("AdminID");
+            if (ViewBag.Name != null || ViewBag.Admin != null)
+            {
+
+                int year = DateTime.Now.Year;
+
+                List<NomineeDetail> NomineeList = new List<NomineeDetail>();
+                NomineeMethod nm = new NomineeMethod();
+               
                 string error = "";
                 NomineeList = nm.GetNomineeListByYear(year, out error);
                 ViewBag.error = error;
                 return View(NomineeList);
             }
-
             else
             {
                 HttpContext.Session.SetString("fromWhere", "FromVoteOn");
@@ -183,10 +223,10 @@ namespace WebApplication1.Controllers
             tempID = nd.Nominee_Id;
             ViewBag.image = nd.Nominee_ImgLink;
             ViewBag.voteId = tempID;
-            HttpContext.Session.SetInt32("extraInfo",tempID);
+            HttpContext.Session.SetInt32("extraInfo", tempID);
 
             return View();
-
+       
         }
         [HttpPost]
         public IActionResult VoteSite(VoteDetail vd)
@@ -200,8 +240,7 @@ namespace WebApplication1.Controllers
             i = vm.InsertVote(vd,temp, out error);
             ViewBag.error = error;
             UserMethod um = new UserMethod();
-            UserDetail ud = um.GetUserByUserName(HttpContext.Session.GetString("UserID"),out string errormsg);
-            
+            um.SetHasVotedToTrue(HttpContext.Session.GetString("UserID"),out string errormsg);
             return RedirectToAction("NomineesToVoteOn");
         }
 
@@ -209,36 +248,53 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult NomineeScore()
         {
-            List<NomineeDetail> NomineeList = new List<NomineeDetail>();  
-            NomineeMethod nm = new NomineeMethod();
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                List<NomineeDetail> NomineeList = new List<NomineeDetail>();
+                NomineeMethod nm = new NomineeMethod();
+                ViewBag.voting = votingOpen;
+                NomineeList = nm.GetNomineeListWithVotes(out string msg1);
 
-            NomineeList = nm.GetNomineeListWithVotes(out string msg1);
-                     
-            return View(NomineeList);
+                return View(NomineeList);
+            }
+            else return RedirectToAction("AdminLogin"); 
         }
         [HttpPost]
         public IActionResult NomineeScore(string ByYear)
         {
-            int i = Convert.ToInt32(ByYear);
-            List<NomineeDetail> NomineeList = new List<NomineeDetail>();
-            NomineeMethod nm = new NomineeMethod();
-            NomineeList = nm.GetNomineeListWithVotes(out string error);
-            ViewData["ByYear"] = ByYear;
-            return View(NomineeList);
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                int i = Convert.ToInt32(ByYear);
+                List<NomineeDetail> NomineeList = new List<NomineeDetail>();
+                NomineeMethod nm = new NomineeMethod();
+                ViewBag.voting = votingOpen;
+                NomineeList = nm.GetNomineeListWithVotes(out string error);
+                ViewData["ByYear"] = ByYear;
+                return View(NomineeList);
+            }
+            else return RedirectToAction("AdminLogin");
         }
         public IActionResult Motivations(int id)
         {
-            NomineeMethod nm = new NomineeMethod();
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                NomineeMethod nm = new NomineeMethod();
             NomineeDetail nd = nm.GetNomineeById(id, out string errormsg);
             List<VoteDetail> voteList = new List<VoteDetail>();
             VoteMethod vm = new VoteMethod();
             voteList = vm.GetMotivationListById(id, out string msg);
             ViewBag.Name = nd.Nominee_FirstName + " " + nd.Nominee_LastName;
             return View(voteList);
+            }
+            else return RedirectToAction("AdminLogin");
         }
         public IActionResult Admin()
         {
-            return View();
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                return View();
+            }
+            else return RedirectToAction("AdminLogin");
         }
         public IActionResult Privacy()
         {
@@ -284,6 +340,8 @@ namespace WebApplication1.Controllers
 
         public IActionResult LogOut()
         {
+
+
             HttpContext.Session.Clear();
             return View();
         }
@@ -291,9 +349,11 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult AdminLogin()
         {
-            return View();
-        }
+         
+                return View();
 
+          
+        }
         [HttpPost]
         public IActionResult AdminLogin(UserDetail ud)
         {
@@ -424,31 +484,32 @@ namespace WebApplication1.Controllers
             return RedirectToAction("AllUsers");
         }
 
-        [HttpGet]
-        public IActionResult RemoveUser(string id)
+        public IActionResult CloseVote()
         {
-            UserMethod um = new UserMethod();
-            UserDetail ud = new UserDetail();
-
-            ud = um.GetUserByUserName(id , out string errormsg); 
-            
-            ViewData["error"] = errormsg;
-
-            return View(ud); 
+            return View();
         }
 
-        [HttpPost, ActionName("RemoveUser")]
-        public IActionResult ConfirmDelete(string id)
+        public IActionResult CloseVoteConfirmed()
         {
-
-            ViewData["username"] = id;
-
+            votingOpen = false;
+            ViewBag.voting = votingOpen;
+            string error = "";
             UserMethod um = new UserMethod();
-            um.DeleteUser(id, out string errormsg);
+            um.resetVotes(out error);
+            
+            return RedirectToAction("NomineeScore");
+        }
 
-            ViewData["error"] = errormsg; 
+        public IActionResult VotingClosed()
+        {
+            return View();
+        }
 
-            return RedirectToAction("AllUsers"); 
+        public IActionResult OpenVote()
+        {
+            votingOpen = true;
+            ViewBag.voting = votingOpen;
+            return RedirectToAction("NomineeScore");
         }
     }
 }

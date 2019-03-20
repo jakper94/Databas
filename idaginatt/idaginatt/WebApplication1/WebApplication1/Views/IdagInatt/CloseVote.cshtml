@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewData["Title"] = "CloseVote";
+}
+
+<h2>Stäng röstning</h2>
+
+<h3>Är du säker på att du vill stänga röstningen?</h3>
+
+<form asp-action="CloseVoteConfirmed">
+    <input type="submit" value="Stäng" class="btn btn-default" /> |
+    <a asp-action="NomineeScore">Tillbaka till listan</a>
+</form>
