@@ -166,11 +166,11 @@ namespace WebApplication1.Controllers
                 List<NomineeDetail> NomineeList = new List<NomineeDetail>();
                 NomineeMethod nm = new NomineeMethod();
                 UserMethod um = new UserMethod();
-                UserDetail ud = um.GetUserByUserName(ViewBag.Name, out string errormsg);
+                
                 string error = "";
                 NomineeList = nm.GetNomineeListByYear(year, out error);
                 ViewBag.error = error;
-                if (ud.User_HasVoted == true)
+                if (um.GetIfUserHasVooted(HttpContext.Session.GetString("UserID"),out string msg1))
                 {
                     return RedirectToAction("AllNominees");
                 }

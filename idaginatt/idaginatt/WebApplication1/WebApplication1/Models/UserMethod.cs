@@ -285,48 +285,7 @@ namespace WebApplication1.Models
                 dbConnection.Close();
             }
         }
-        public UserDetail GetUserByUserName(string username, out string errormsg)
-        {
-            //sakapa SqlConnection
-            SqlConnection dbConnection = new SqlConnection();
-            //Koppling mot SQL  Server
-            dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
-
-            //Sqlstring för att hämta alla personer
-            string sqlstring = "Select * From Tbl_User Where Us_UserName = @user";
-            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
-            dbCommand.Parameters.Add("user", SqlDbType.Int).Value = username;
-            //skapa en adapter
-            SqlDataAdapter myAdapter = new SqlDataAdapter(dbCommand);
-            DataSet myDS = new DataSet();
-
-
-            try
-            {
-                dbConnection.Open();
-                myAdapter.Fill(myDS, "MyUser");
-                int i = 0;
-                UserDetail ud = new UserDetail();
-                ud.User_UserName = myDS.Tables["MyUser"].Rows[i]["Us_UserName"].ToString();
-                ud.User_FirstName = myDS.Tables["MyUser"].Rows[i]["Us_FirstName"].ToString();
-                ud.User_LastName = myDS.Tables["MyUser"].Rows[i]["Us_LastName"].ToString();
-                ud.User_HasVoted = myDS.Tables["MyUser"].Rows[i]["Us_HasVoted"] as bool? ?? false;
-             
-                errormsg = "";
-                return ud;
-            }
-            catch (Exception e)
-            {
-                errormsg = e.Message;
-                return null;
-            }
-            finally
-            {
-                dbConnection.Close();
-            }
-
-
-        }
+       
         public int SetHasVotedToTrue(string userNameId, out string errormsg)
         {
             SqlConnection dbConnection = new SqlConnection();
@@ -383,6 +342,50 @@ namespace WebApplication1.Models
                 dbConnection.Close();
             }
 
+        }
+        public bool GetIfUserHasVooted(string userName, out string errormsg)
+        {
+            SqlConnection dbConnection = new SqlConnection();
+
+            dbConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Idag_Inatt;Integrated Security=True";
+
+            String sqlString = "SELECT Us_Password, Us_HasVoted FROM Tbl_User WHERE Us_UserName = '" + userName + "'";
+            SqlCommand dbCommand = new SqlCommand(sqlString, dbConnection);
+            //    dbCommand.Parameters.Add("userName", SqlDbType.NChar,8).Value = userName;
+
+            SqlDataReader reader = null;
+            errormsg = "";
+            try
+            {
+                dbConnection.Open();
+                reader = dbCommand.ExecuteReader();
+                reader.Read();
+                
+                bool hasvooted = reader["Us_HasVoted"] as bool? ?? false;
+                reader.Close();
+
+                if (hasvooted)
+                {
+                    
+                    return true;
+                }
+                else
+                {
+                   
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+
+                errormsg = "The username does not exist.";
+                return false;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
         }
     }
 }
