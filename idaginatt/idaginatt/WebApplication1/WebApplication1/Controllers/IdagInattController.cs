@@ -153,19 +153,49 @@ namespace WebApplication1.Controllers
         {
             ViewBag.Name = HttpContext.Session.GetString("UserID");
             ViewBag.Admin = HttpContext.Session.GetString("AdminID");
-
             if (ViewBag.Name != null || ViewBag.Admin != null)
             {
+               
                 int year = DateTime.Now.Year;
 
                 List<NomineeDetail> NomineeList = new List<NomineeDetail>();
                 NomineeMethod nm = new NomineeMethod();
+                UserMethod um = new UserMethod();
+                UserDetail ud = um.GetUserByUserName(ViewBag.Name, out string errormsg);
+                string error = "";
+                NomineeList = nm.GetNomineeListByYear(year, out error);
+                ViewBag.error = error;
+                if (ud.User_HasVoted == true)
+                {
+                    return RedirectToAction("AllNominees");
+                }
+                else return View(NomineeList);
+
+            }
+
+            else
+            {
+                HttpContext.Session.SetString("fromWhere", "FromVoteOn");
+                return View("Login");
+            }
+        }
+        public IActionResult AllNominees()
+        {
+            ViewBag.Name = HttpContext.Session.GetString("UserID");
+            ViewBag.Admin = HttpContext.Session.GetString("AdminID");
+            if (ViewBag.Name != null || ViewBag.Admin != null)
+            {
+
+                int year = DateTime.Now.Year;
+
+                List<NomineeDetail> NomineeList = new List<NomineeDetail>();
+                NomineeMethod nm = new NomineeMethod();
+               
                 string error = "";
                 NomineeList = nm.GetNomineeListByYear(year, out error);
                 ViewBag.error = error;
                 return View(NomineeList);
             }
-
             else
             {
                 HttpContext.Session.SetString("fromWhere", "FromVoteOn");
@@ -200,8 +230,7 @@ namespace WebApplication1.Controllers
             i = vm.InsertVote(vd,temp, out error);
             ViewBag.error = error;
             UserMethod um = new UserMethod();
-            UserDetail ud = um.GetUserByUserName(HttpContext.Session.GetString("UserID"),out string errormsg);
-            
+            um.SetHasVotedToTrue(HttpContext.Session.GetString("UserID"),out string errormsg);
             return RedirectToAction("NomineesToVoteOn");
         }
 
