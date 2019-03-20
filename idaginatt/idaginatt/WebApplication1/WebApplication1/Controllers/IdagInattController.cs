@@ -165,7 +165,7 @@ namespace WebApplication1.Controllers
                 string error = "";
                 NomineeList = nm.GetNomineeListByYear(year, out error);
                 ViewBag.error = error;
-                if (ud.User_HasVoted == true)
+                if (um.GetIfUserHasVooted(HttpContext.Session.GetString("UserID"),out string msg1))
                 {
                     return RedirectToAction("AllNominees");
                 }
