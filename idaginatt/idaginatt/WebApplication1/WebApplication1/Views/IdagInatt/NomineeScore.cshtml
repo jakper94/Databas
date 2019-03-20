@@ -9,7 +9,20 @@
 <a asp-action="ViewAttending" class="btn btn-default" style="color: white;background-color: black;font-weight:bolder; ">Visa anmälningar</a>
 <a asp-action="AllUsers" class="btn btn-default" style="color: white;background-color: black;font-weight:bolder; ">Visa användare</a>
 
-<h2>Reultat från röstningen</h2>
+<h2>Resultat från röstningen</h2>
+@{
+    if (ViewBag.voting == true)
+    {
+        <a asp-action="CloseVote" class="btn btn-default" style="color: white;background-color: black;font-weight:bolder; ">Stäng röstning</a>
+
+    }
+    else
+    {
+        <a asp-action="OpenVote" class="btn btn-default" style="color: white;background-color: black;font-weight:bolder; ">Öppna Röstning</a>
+
+    }
+}
+
 
 @{
     int i = 0;
