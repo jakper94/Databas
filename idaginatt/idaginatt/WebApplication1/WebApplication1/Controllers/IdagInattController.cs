@@ -134,6 +134,9 @@ namespace WebApplication1.Controllers
             string error = "";
             int i = 0;
             i = nm.DeleteNominee(id, out error);
+
+            ViewData["error"] = error; 
+
             return RedirectToAction("NomineeList");
         }
         public ActionResult NomineeDetails(int id)
@@ -173,6 +176,7 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult VoteSite(int id)
         {
+
             NomineeMethod nm = new NomineeMethod();
             NomineeDetail nd = nm.GetNomineeById(id, out string errormsg);
             ViewBag.Name = nd.Nominee_FirstName + nd.Nominee_LastName;
@@ -195,6 +199,9 @@ namespace WebApplication1.Controllers
 
             i = vm.InsertVote(vd,temp, out error);
             ViewBag.error = error;
+            UserMethod um = new UserMethod();
+            UserDetail ud = um.GetUserByUserName(HttpContext.Session.GetString("UserID"),out string errormsg);
+            
             return RedirectToAction("NomineesToVoteOn");
         }
 

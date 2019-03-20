@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -34,7 +36,14 @@
                     <li><a asp-area="" asp-controller="IdagInatt" asp-action="Attend">Anmälan</a></li>
                     <li><a asp-area="" asp-controller="IdagInatt" asp-action="NomineesToVoteOn">Årets ID:are</a></li>
                     <li><a asp-area="" asp-controller="IdagInatt" asp-action="Login">Logga in</a></li>
-                    <li><a asp-area="" asp-controller="IdagInatt" asp-action="LogOut">Logga ut</a></li>
+
+                    @{ViewBag.Name = Context.Session.GetString("UserID");}
+                    @{ViewBag.Name = Context.Session.GetString("UserID");}
+
+                    @if (ViewBag.Name != null || ViewBag.Admin != null)
+                    {
+                        <li><a asp-area="" asp-controller="IdagInatt" asp-action="LogOut">Logga ut</a></li>
+                    }
 
                 </ul>
             </div>
