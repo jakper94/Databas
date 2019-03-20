@@ -354,6 +354,34 @@ namespace WebApplication1.Models
             {
                 dbConnection.Close();
             }
+        }
+
+        public int resetVotes(out string errormsg)
+        {
+            SqlConnection dbConnection = new SqlConnection();
+            dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
+            string sqlstring = "UPDATE Tbl_User SET Us_HasVoted = 1";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+
+            try
+            {
+                dbConnection.Open();
+                int i = 0;
+                i = dbCommand.ExecuteNonQuery();
+                if (i == 1) { errormsg = ""; }
+                else { errormsg = "Votes not reset in database"; }
+                return (i);
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return 0;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
 
         }
     }
