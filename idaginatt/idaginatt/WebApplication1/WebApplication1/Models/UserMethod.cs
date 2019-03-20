@@ -237,11 +237,12 @@ namespace WebApplication1.Models
         {
             SqlConnection dbConnection = new SqlConnection();
             dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
-            string sqlstring = "UPDATE Tbl_User SET Us_IsAdmin = 1, Us_Password = @password WHERE Us_UserName = '" + username + "';";
+            string sqlstring = "UPDATE Tbl_User SET Us_IsAdmin = 1, Us_Password = @password WHERE Us_UserName = @username";
 
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
 
             dbCommand.Parameters.Add("password", SqlDbType.NVarChar, 20).Value = password;
+            dbCommand.Parameters.Add("username", SqlDbType.NChar, 8).Value = username;
 
 
             errormsg = "";
