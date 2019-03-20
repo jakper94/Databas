@@ -310,7 +310,7 @@ namespace WebApplication1.Models
                 ud.User_UserName = myDS.Tables["MyUser"].Rows[i]["Us_UserName"].ToString();
                 ud.User_FirstName = myDS.Tables["MyUser"].Rows[i]["Us_FirstName"].ToString();
                 ud.User_LastName = myDS.Tables["MyUser"].Rows[i]["Us_LastName"].ToString();
-                ud.User_HasVoted = Convert.ToBoolean(myDS.Tables["MyUser"].Rows[i]["Us_HasVoted"]);
+                ud.User_HasVoted = myDS.Tables["MyUser"].Rows[i]["Us_HasVoted"] as bool? ?? false;
              
                 errormsg = "";
                 return ud;
