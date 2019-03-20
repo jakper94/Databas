@@ -134,6 +134,9 @@ namespace WebApplication1.Controllers
             string error = "";
             int i = 0;
             i = nm.DeleteNominee(id, out error);
+
+            ViewData["error"] = error; 
+
             return RedirectToAction("NomineeList");
         }
         public ActionResult NomineeDetails(int id)
