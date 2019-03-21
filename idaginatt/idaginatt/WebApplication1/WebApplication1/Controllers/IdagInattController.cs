@@ -441,16 +441,16 @@ namespace WebApplication1.Controllers
             if (HttpContext.Session.GetString("AdminID") != null)
             {
                 List<UserDetail> userList = new List<UserDetail>();
-            UserMethod um = new UserMethod();
+                UserMethod um = new UserMethod();
 
-            string error = "";
+                string error = "";
 
-            userList = um.SelectUsers(out error);
+                userList = um.SelectUsers(out error);
 
-            ViewBag.error = error; 
+                ViewBag.error = error; 
 
-            return View(userList);
-        }
+                return View(userList);
+            }
             else return RedirectToAction("AdminLogin");
     }
 
