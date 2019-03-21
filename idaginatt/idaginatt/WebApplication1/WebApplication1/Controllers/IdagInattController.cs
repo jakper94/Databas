@@ -267,17 +267,16 @@ namespace WebApplication1.Controllers
             }
             else return RedirectToAction("AdminLogin"); 
         }
+        
         [HttpPost]
-        public IActionResult NomineeScore(string ByYear)
+        public IActionResult NomineeScore(string year)
         {
             if (HttpContext.Session.GetString("AdminID") != null)
             {
-                int i = Convert.ToInt32(ByYear);
                 List<NomineeDetail> NomineeList = new List<NomineeDetail>();
                 NomineeMethod nm = new NomineeMethod();
                 ViewBag.voting = votingOpen;
-                NomineeList = nm.GetNomineeListWithVotes(out string error);
-                ViewData["ByYear"] = ByYear;
+                NomineeList = nm.GetNomineeListWithVotesByYear(year,out string error);
                 return View(NomineeList);
             }
             else return RedirectToAction("AdminLogin");
