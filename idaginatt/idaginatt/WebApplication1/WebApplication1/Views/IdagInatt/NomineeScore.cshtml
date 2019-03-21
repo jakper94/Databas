@@ -28,9 +28,10 @@
 
 @using (Html.BeginForm())
 {
-    <p>
-        Sortera efter år: @Html.TextBox("year") <br />
-    </p>
+<p>
+    Sortera efter år: @Html.TextBox("year") 
+    <input type="submit" value="Filtrera" /><br />
+</p>
 }
 
 <table class="table">

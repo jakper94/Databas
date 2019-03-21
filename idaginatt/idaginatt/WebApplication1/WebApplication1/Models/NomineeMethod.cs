@@ -285,14 +285,13 @@ namespace WebApplication1.Models
             SqlConnection dbConnection = new SqlConnection();
             dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
 
-            string sqlstring = "Select Nom_FirstName, Nom_LastName, Nom_ImgLink, Nom_Year, Nom_Id, count(Vo_VotedOn) Votes From Tbl_Nominee, Tbl_Vote where Vo_VotedOn = Nom_Id AND Nom_Year =@byyear group by Nom_FirstName, Nom_LastName, Nom_ImgLink, Nom_Year, Nom_Id order by Votes DESC";
+            string sqlstring = "Select Nom_FirstName, Nom_LastName, Nom_ImgLink, Nom_Year, Nom_Id, count(Vo_VotedOn) Votes From Tbl_Nominee, Tbl_Vote where Vo_VotedOn = Nom_Id AND Nom_Year LIKE '%"+year+"%' group by Nom_FirstName, Nom_LastName, Nom_ImgLink, Nom_Year, Nom_Id order by Votes DESC";
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
 
 
             SqlDataReader reader = null;
 
             List<NomineeDetail> NomineeList = new List<NomineeDetail>();
-            dbCommand.Parameters.Add("byyear", SqlDbType.Int).Value = year;
             errormsg = "";
 
             try
