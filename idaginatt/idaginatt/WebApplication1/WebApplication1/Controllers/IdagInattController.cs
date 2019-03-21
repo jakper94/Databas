@@ -140,11 +140,11 @@ namespace WebApplication1.Controllers
             if (HttpContext.Session.GetString("AdminID") != null)
             {
                 NomineeMethod nm = new NomineeMethod();
-            string error = "";
-            int i = 0;
-            i = nm.DeleteNominee(id, out error);
+                string error = "";
+                int i = 0;
+                i = nm.DeleteNominee(id, out error);
 
-            ViewData["error"] = error; 
+                ViewData["error"] = error; 
 
             return RedirectToAction("NomineeList");
             }
@@ -281,6 +281,7 @@ namespace WebApplication1.Controllers
             }
             else return RedirectToAction("AdminLogin");
         }
+
         public IActionResult Motivations(int id)
         {
             if (HttpContext.Session.GetString("AdminID") != null)
@@ -295,6 +296,7 @@ namespace WebApplication1.Controllers
             }
             else return RedirectToAction("AdminLogin");
         }
+
         public IActionResult Admin()
         {
             if (HttpContext.Session.GetString("AdminID") != null)
@@ -303,6 +305,7 @@ namespace WebApplication1.Controllers
             }
             else return RedirectToAction("AdminLogin");
         }
+
         public IActionResult Privacy()
         {
             return View();
@@ -356,15 +359,12 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult AdminLogin()
         {
-         
-                return View();
-
-          
+                return View();  
         }
+
         [HttpPost]
         public IActionResult AdminLogin(UserDetail ud)
-        {
-           
+        {   
             UserMethod um = new UserMethod();
             string error = "";
             if (um.AdminLogIn(ud.User_UserName, ud.User_Password, out error) == true)
@@ -381,8 +381,7 @@ namespace WebApplication1.Controllers
         public IActionResult Attend()
         {
             if (HttpContext.Session.GetString("UserID") != null)
-            {
-                
+            {       
                 return View();
             }
             else
@@ -441,16 +440,16 @@ namespace WebApplication1.Controllers
             if (HttpContext.Session.GetString("AdminID") != null)
             {
                 List<UserDetail> userList = new List<UserDetail>();
-            UserMethod um = new UserMethod();
+                UserMethod um = new UserMethod();
 
-            string error = "";
+                string error = "";
 
-            userList = um.SelectUsers(out error);
+                userList = um.SelectUsers(out error);
 
-            ViewBag.error = error; 
+                ViewBag.error = error; 
 
-            return View(userList);
-        }
+                return View(userList);
+            }
             else return RedirectToAction("AdminLogin");
     }
 
@@ -563,12 +562,12 @@ namespace WebApplication1.Controllers
             if (HttpContext.Session.GetString("AdminID") != null)
             {
                 votingOpen = false;
-            ViewBag.voting = votingOpen;
-            string error = "";
-            UserMethod um = new UserMethod();
-            um.resetVotes(out error);
+                ViewBag.voting = votingOpen;
+                string error = "";
+                UserMethod um = new UserMethod();
+                um.resetVotes(out error);
             
-            return RedirectToAction("NomineeScore");
+                return RedirectToAction("NomineeScore");
             }
             else return RedirectToAction("AdminLogin");
         }
@@ -592,6 +591,7 @@ namespace WebApplication1.Controllers
             }
             else return RedirectToAction("AdminLogin");
         }
+
         [HttpGet]
         public IActionResult RemoveUser(string id)
         {
