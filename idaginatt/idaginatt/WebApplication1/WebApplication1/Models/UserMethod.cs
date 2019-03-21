@@ -17,7 +17,7 @@ namespace WebApplication1.Models
 
             dbConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Idag_Inatt;Integrated Security=True";
 
-            String sqlString = "INSERT INTO Tbl_User (Us_UserName) VALUES (@User_UserName)";
+            String sqlString = "INSERT INTO Tbl_User (Us_UserName, Us_HasVoted, Us_IsAdmin) VALUES (@User_UserName,0,0)";
             SqlCommand dbCommand = new SqlCommand(sqlString, dbConnection);
 
             dbCommand.Parameters.Add("User_UserName", SqlDbType.NChar,8).Value = ud.User_UserName;
