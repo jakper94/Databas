@@ -62,7 +62,9 @@
                 <td>
                     @Html.ActionLink("Gör till admin", "MakeAdmin", new { username = item.User_UserName }) |
                     @Html.ActionLink("Ta bort som admin", "RemoveAdmin", new { username = item.User_UserName }) |
+                    <a asp-action="EditUser" asp-route-id="@item.User_UserName">Redigera användare</a> |
                     <a asp-action="RemoveUser" asp-route-id="@item.User_UserName">Ta bort användare</a>
+
                 </td>
             </tr>
         }

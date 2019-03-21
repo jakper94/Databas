@@ -517,11 +517,37 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditUser()
+        public IActionResult EditUser(string id)
         {
-            return View();
-        }
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                UserMethod um = new UserMethod();
+                UserDetail ud = new UserDetail();
+
+                ud = um.GetUserByUserName(id, out string errormsg);
+                ViewData["error"] = errormsg; 
         
+                return View(ud);
+            }
+            else return RedirectToAction("AdminLogin");
+        }
+
+        [HttpPost]
+        public IActionResult EditUser(UserDetail ud, string id)
+        {
+
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                UserMethod um = new UserMethod();
+
+                um.EditUserInfo(ud, id, out string errormsg);
+
+                ViewData["error"] = errormsg;
+
+                return RedirectToAction("AllUsers");
+            }
+            else return RedirectToAction("AdminLogin");
+        }
 
         public IActionResult CloseVote()
         {
@@ -569,28 +595,36 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult RemoveUser(string id)
         {
-            UserMethod um = new UserMethod();
-            UserDetail ud = new UserDetail();
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                UserMethod um = new UserMethod();
+                UserDetail ud = new UserDetail();
 
-            ud = um.GetUserByUserName(id, out string errormsg);
+                ud = um.GetUserByUserName(id, out string errormsg);
 
-            ViewData["error"] = errormsg;
+                ViewData["error"] = errormsg;
 
-            return View(ud);
+                return View(ud);
+            }
+            else return RedirectToAction("AdminLogin");
         }
 
         [HttpPost, ActionName("RemoveUser")]
         public IActionResult ConfirmDelete(string id)
         {
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                ViewData["username"] = id;
 
-            ViewData["username"] = id;
+                UserMethod um = new UserMethod();
+                um.DeleteUser(id, out string errormsg);
 
-            UserMethod um = new UserMethod();
-            um.DeleteUser(id, out string errormsg);
+                ViewData["error"] = errormsg;
 
-            ViewData["error"] = errormsg;
+                return RedirectToAction("AllUsers");
+            }
+            else return RedirectToAction("AdminLogin");
 
-            return RedirectToAction("AllUsers");
         }
     }
 }
