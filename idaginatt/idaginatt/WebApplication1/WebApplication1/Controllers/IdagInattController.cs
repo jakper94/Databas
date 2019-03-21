@@ -484,6 +484,12 @@ namespace WebApplication1.Controllers
             return RedirectToAction("AllUsers");
         }
 
+        public IActionResult EditUser()
+        {
+            return View();
+        }
+        
+
         public IActionResult CloseVote()
         {
             return View();
