@@ -137,7 +137,9 @@ namespace WebApplication1.Controllers
         [HttpPost, ActionName("DeleteNominee")]
         public IActionResult DeleteConfirmed(int id)
         {
-            NomineeMethod nm = new NomineeMethod();
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                NomineeMethod nm = new NomineeMethod();
             string error = "";
             int i = 0;
             i = nm.DeleteNominee(id, out error);
@@ -145,15 +147,19 @@ namespace WebApplication1.Controllers
             ViewData["error"] = error; 
 
             return RedirectToAction("NomineeList");
+            }
+            else return RedirectToAction("AdminLogin");
         }
         public ActionResult NomineeDetails(int id)
         {
-            NomineeMethod nm = new NomineeMethod();
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                NomineeMethod nm = new NomineeMethod();
             NomineeDetail nd = new NomineeDetail();
             nd = nm.GetNomineeById(id, out string errormsg);
-
-
             return View(nd);
+            }
+            else return RedirectToAction("AdminLogin");
         }
 
         public IActionResult NomineesToVoteOn()
@@ -191,6 +197,7 @@ namespace WebApplication1.Controllers
         }
         public IActionResult AllNominees()
         {
+
             ViewBag.Name = HttpContext.Session.GetString("UserID");
             ViewBag.Admin = HttpContext.Session.GetString("AdminID");
             if (ViewBag.Name != null || ViewBag.Admin != null)
@@ -411,6 +418,7 @@ namespace WebApplication1.Controllers
 
         public IActionResult ViewAttending()
         {
+
             ViewBag.Admin = HttpContext.Session.GetString("AdminID");
 
             if (ViewBag.Admin != null)
@@ -430,7 +438,9 @@ namespace WebApplication1.Controllers
         
         public IActionResult AllUsers()
         {
-            List<UserDetail> userList = new List<UserDetail>();
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                List<UserDetail> userList = new List<UserDetail>();
             UserMethod um = new UserMethod();
 
             string error = "";
@@ -441,6 +451,8 @@ namespace WebApplication1.Controllers
 
             return View(userList);
         }
+            else return RedirectToAction("AdminLogin");
+    }
 
         [HttpGet]
         public IActionResult AddUser()
@@ -510,6 +522,32 @@ namespace WebApplication1.Controllers
             votingOpen = true;
             ViewBag.voting = votingOpen;
             return RedirectToAction("NomineeScore");
+        }
+        [HttpGet]
+        public IActionResult RemoveUser(string id)
+        {
+            UserMethod um = new UserMethod();
+            UserDetail ud = new UserDetail();
+
+            ud = um.GetUserByUserName(id, out string errormsg);
+
+            ViewData["error"] = errormsg;
+
+            return View(ud);
+        }
+
+        [HttpPost, ActionName("RemoveUser")]
+        public IActionResult ConfirmDelete(string id)
+        {
+
+            ViewData["username"] = id;
+
+            UserMethod um = new UserMethod();
+            um.DeleteUser(id, out string errormsg);
+
+            ViewData["error"] = errormsg;
+
+            return RedirectToAction("AllUsers");
         }
     }
 }
