@@ -58,6 +58,14 @@
                     {
                         <li><a asp-area="" asp-controller="IdagInatt" asp-action="LogOut">Logga ut</a></li>
                     }
+                    @if (ViewBag.admin != null)
+                    {
+                        <li><a asp-area="" asp-controller="IdagInatt" asp-action="Admin">Admin</a></li>
+                    }
+                    @if (ViewBag.Name != null)
+                    {
+                        <li><p class="nav-link disabled" href="#" style="color: lawngreen; margin:5px 0 0px;text-align: center; position:relative; padding: 10px 15px;">@ViewBag.Name</p></li>
+                    }
                 </ul>
             </div>
         </div>

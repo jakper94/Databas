@@ -492,20 +492,28 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult MakeAdmin(UserDetail ud)
         {
-            UserMethod um = new UserMethod();
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                UserMethod um = new UserMethod();
             um.MakeUserAdmin(ud.User_UserName, ud.User_Password, out string errormsg);
 
-            return RedirectToAction("AllUsers"); 
+            return RedirectToAction("AllUsers");
+            }
+            else return RedirectToAction("AdminLogin");
         }
 
         public IActionResult RemoveAdmin(string username)
         {
-            UserMethod um = new UserMethod();
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                UserMethod um = new UserMethod();
             um.DeleteAdmin(username, out string errormsg);
 
             ViewData["error"] = errormsg;
 
             return RedirectToAction("AllUsers");
+            }
+            else return RedirectToAction("AdminLogin");
         }
 
         [HttpGet]
@@ -517,30 +525,46 @@ namespace WebApplication1.Controllers
 
         public IActionResult CloseVote()
         {
-            return View();
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                return View();
+            }
+            else return RedirectToAction("AdminLogin");
         }
 
         public IActionResult CloseVoteConfirmed()
         {
-            votingOpen = false;
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                votingOpen = false;
             ViewBag.voting = votingOpen;
             string error = "";
             UserMethod um = new UserMethod();
             um.resetVotes(out error);
             
             return RedirectToAction("NomineeScore");
+            }
+            else return RedirectToAction("AdminLogin");
         }
 
         public IActionResult VotingClosed()
         {
-            return View();
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                return View();
+            }
+            else return RedirectToAction("AdminLogin");
         }
 
         public IActionResult OpenVote()
         {
-            votingOpen = true;
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                votingOpen = true;
             ViewBag.voting = votingOpen;
             return RedirectToAction("NomineeScore");
+            }
+            else return RedirectToAction("AdminLogin");
         }
         [HttpGet]
         public IActionResult RemoveUser(string id)
