@@ -457,24 +457,36 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult AddUser()
         {
-            return View();
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                return View();
+            }
+            else return RedirectToAction("AdminLogin");
         }
 
         [HttpPost]
         public IActionResult AddUser(UserDetail ud)
         {
-            string error = "";
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                string error = "";
             UserMethod um = new UserMethod();
             um.InsertUser(ud, out error);
             return RedirectToAction("AllUsers");
+            }
+            else return RedirectToAction("AdminLogin");
         }
 
         [HttpGet]
         public IActionResult MakeAdmin(string username)
         {
-            UserDetail ud = new UserDetail();
+            if (HttpContext.Session.GetString("AdminID") != null)
+            {
+                UserDetail ud = new UserDetail();
             ud.User_UserName = username;
             return View(ud);
+            }
+            else return RedirectToAction("AdminLogin");
         }
 
         [HttpPost]
