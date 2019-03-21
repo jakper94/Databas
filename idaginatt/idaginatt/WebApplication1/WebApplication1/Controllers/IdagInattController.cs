@@ -516,6 +516,12 @@ namespace WebApplication1.Controllers
             else return RedirectToAction("AdminLogin");
         }
 
+        public IActionResult EditUser()
+        {
+            return View();
+        }
+        
+
         public IActionResult CloseVote()
         {
             if (HttpContext.Session.GetString("AdminID") != null)
