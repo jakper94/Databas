@@ -182,7 +182,7 @@ namespace WebApplication1.Controllers
                 string error = "";
                 NomineeList = nm.GetNomineeListByYear(year, out error);
                 ViewBag.error = error;
-                if (um.GetIfUserHasVooted(HttpContext.Session.GetString("UserID"),out string msg1))
+                if (um.GetIfUserHasVooted(HttpContext.Session.GetString("UserID"), out string msg1) || um.GetIfUserHasVooted((ViewBag.Admin), out string msg2))
                 {
                     return RedirectToAction("AllNominees");
                 }
@@ -247,6 +247,7 @@ namespace WebApplication1.Controllers
             i = vm.InsertVote(vd,temp, out error);
             ViewBag.error = error;
             UserMethod um = new UserMethod();
+            um.SetHasVotedToTrue(HttpContext.Session.GetString("AdminID"), out string errormsg1);
             um.SetHasVotedToTrue(HttpContext.Session.GetString("UserID"),out string errormsg);
             return RedirectToAction("NomineesToVoteOn");
         }
@@ -266,17 +267,16 @@ namespace WebApplication1.Controllers
             }
             else return RedirectToAction("AdminLogin"); 
         }
+        
         [HttpPost]
-        public IActionResult NomineeScore(string ByYear)
+        public IActionResult NomineeScore(string year)
         {
             if (HttpContext.Session.GetString("AdminID") != null)
             {
-                int i = Convert.ToInt32(ByYear);
                 List<NomineeDetail> NomineeList = new List<NomineeDetail>();
                 NomineeMethod nm = new NomineeMethod();
                 ViewBag.voting = votingOpen;
-                NomineeList = nm.GetNomineeListWithVotes(out string error);
-                ViewData["ByYear"] = ByYear;
+                NomineeList = nm.GetNomineeListWithVotesByYear(year,out string error);
                 return View(NomineeList);
             }
             else return RedirectToAction("AdminLogin");
@@ -369,7 +369,7 @@ namespace WebApplication1.Controllers
             string error = "";
             if (um.AdminLogIn(ud.User_UserName, ud.User_Password, out error) == true)
             {
-                HttpContext.Session.SetString("AdminID", ud.User_Password);
+                HttpContext.Session.SetString("AdminID", ud.User_UserName);
                 return View("Admin");
 
             }

@@ -23,16 +23,14 @@
 
     }
 }
+<br />
+<br />
 
-
-@{
-    int i = 0;
-    if (ViewData["ByYear"] != null) { i = (int)ViewData["ByYear"]; }
-    string s = @ViewBag.message;
-    if (@ViewBag.message != null)
-    {
-
-    }
+@using (Html.BeginForm())
+{
+    <p>
+        Sortera efter år: @Html.TextBox("year") <br />
+    </p>
 }
 
 <table class="table">
