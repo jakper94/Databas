@@ -381,8 +381,17 @@ namespace WebApplication1.Controllers
         public IActionResult Attend()
         {
             if (HttpContext.Session.GetString("UserID") != null)
-            {       
-                return View();
+            {
+                string username = HttpContext.Session.GetString("UserID");
+                string error = "";
+                UserMethod um = new UserMethod();
+                UserDetail ud = um.GetUserByUserName(username, out error);
+                AttendingDetail ad = new AttendingDetail();
+                ad.Attending_User = ud.User_UserName;
+                ad.Attending_Firstname = ud.User_FirstName;
+                ad.Attending_Lastname = ud.User_LastName;
+                ad.Attending_Class = ud.User_Class;
+                return View(ad);
             }
             else
             {
