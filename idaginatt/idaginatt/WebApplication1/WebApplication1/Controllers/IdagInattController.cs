@@ -624,7 +624,6 @@ namespace WebApplication1.Controllers
                 return RedirectToAction("AllUsers");
             }
             else return RedirectToAction("AdminLogin");
-
         }
     }
 }
