@@ -428,5 +428,37 @@ namespace WebApplication1.Models
                 dbConnection.Close();
             }
         }
+
+        public void EditUserInfo(UserDetail ud, string username, out string errormsg)
+        {
+            SqlConnection dbConnection = new SqlConnection();
+            dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
+            string sqlstring = "UPDATE Tbl_User SET Us_UserName = @username, Us_FirstName = @firstName, Us_LastName = @lastName, Us_Class = @class " +
+                "WHERE Us_UserName = '" + username + "';";
+
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            dbCommand.Parameters.Add("userName", SqlDbType.NChar, 8).Value = ud.User_UserName;
+            dbCommand.Parameters.Add("firstName", SqlDbType.NVarChar, 20).Value = ud.User_FirstName;
+            dbCommand.Parameters.Add("lastName", SqlDbType.NVarChar, 50).Value = ud.User_LastName;
+            dbCommand.Parameters.Add("class", SqlDbType.NChar, 4).Value = ud.User_Class;
+
+            try
+            {
+                dbConnection.Open();
+                int i = 0;
+                i = dbCommand.ExecuteNonQuery();
+                if (i == 1) { errormsg = ""; }
+                else { errormsg = "User not updated in database"; }
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
     }
 }
