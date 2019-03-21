@@ -66,6 +66,11 @@
                     {
                         <li><p class="nav-link disabled" href="#" style="color: lawngreen; margin:5px 0 0px;text-align: center; position:relative; padding: 10px 15px;">@ViewBag.Name</p></li>
                     }
+                    @if (ViewBag.Admin != null)
+                    {
+                        <li><p class="nav-link disabled" href="#" style="color: lawngreen; margin:5px 0 0px;text-align: center; position:relative; padding: 10px 15px;">@ViewBag.Admin</p></li>
+
+                    }
                 </ul>
             </div>
         </div>

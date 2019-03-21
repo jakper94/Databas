@@ -242,7 +242,7 @@ namespace WebApplication1.Models
 
             string sqlstring = "Select Nom_FirstName, Nom_LastName, Nom_ImgLink, Nom_Year, Nom_Id, count(Vo_VotedOn) Votes From Tbl_Nominee, Tbl_Vote where Vo_VotedOn = Nom_Id group by Nom_FirstName, Nom_LastName, Nom_ImgLink, Nom_Year, Nom_Id order by Votes DESC";
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
-           
+
 
             SqlDataReader reader = null;
 
@@ -279,7 +279,50 @@ namespace WebApplication1.Models
             {
                 dbConnection.Close();
             }
+        }
+        public List<NomineeDetail> GetNomineeListWithVotesByYear(string year,out string errormsg)
+        {
+            SqlConnection dbConnection = new SqlConnection();
+            dbConnection.ConnectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Idag_Inatt; Integrated Security = True;";
 
+            string sqlstring = "Select Nom_FirstName, Nom_LastName, Nom_ImgLink, Nom_Year, Nom_Id, count(Vo_VotedOn) Votes From Tbl_Nominee, Tbl_Vote where Vo_VotedOn = Nom_Id AND Nom_Year LIKE '%"+year+"%' group by Nom_FirstName, Nom_LastName, Nom_ImgLink, Nom_Year, Nom_Id order by Votes DESC";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+
+            SqlDataReader reader = null;
+
+            List<NomineeDetail> NomineeList = new List<NomineeDetail>();
+            errormsg = "";
+
+            try
+            {
+                dbConnection.Open();
+
+                reader = dbCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    NomineeDetail Nominee = new NomineeDetail();
+                    Nominee.Nominee_Id = Convert.ToInt16(reader["Nom_Id"]);
+                    Nominee.Nominee_FirstName = reader["Nom_FirstName"].ToString();
+                    Nominee.Nominee_LastName = reader["Nom_LastName"].ToString();
+                    Nominee.Nominee_ImgLink = reader["Nom_ImgLink"].ToString();
+                    Nominee.Nominee_Year = Convert.ToInt16(reader["Nom_Year"]);
+                    Nominee.Nominee_Votes = Convert.ToInt16(reader["Votes"]);
+
+                    NomineeList.Add(Nominee);
+                }
+                return NomineeList;
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
         }
     }
 }
