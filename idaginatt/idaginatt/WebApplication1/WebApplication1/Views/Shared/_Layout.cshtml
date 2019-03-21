@@ -58,6 +58,10 @@
                     {
                         <li><a asp-area="" asp-controller="IdagInatt" asp-action="LogOut">Logga ut</a></li>
                     }
+                    @if (ViewBag.admin != null)
+                    {
+                        <li><a asp-area="" asp-controller="IdagInatt" asp-action="Admin">Admin</a></li>
+                    }
                 </ul>
             </div>
         </div>
