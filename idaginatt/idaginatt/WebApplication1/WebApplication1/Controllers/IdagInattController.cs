@@ -380,8 +380,10 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult Attend()
         {
-            if (HttpContext.Session.GetString("UserID") != null)
-            {       
+            ViewBag.Name = HttpContext.Session.GetString("UserID");
+            ViewBag.Admin = HttpContext.Session.GetString("AdminID");
+            if (ViewBag.Name != null || ViewBag.Admin != null)
+            { 
                 return View();
             }
             else
@@ -439,13 +441,15 @@ namespace WebApplication1.Controllers
         {
             if (HttpContext.Session.GetString("AdminID") != null)
             {
+
+                ViewBag.AdminName = HttpContext.Session.GetString("AdminID");
                 List<UserDetail> userList = new List<UserDetail>();
                 UserMethod um = new UserMethod();
 
                 string error = "";
 
                 userList = um.SelectUsers(out error);
-
+                
                 ViewBag.error = error; 
 
                 return View(userList);
@@ -481,9 +485,17 @@ namespace WebApplication1.Controllers
         {
             if (HttpContext.Session.GetString("AdminID") != null)
             {
-                UserDetail ud = new UserDetail();
+                
+            UserDetail ud = new UserDetail();
             ud.User_UserName = username;
-            return View(ud);
+                if (ud.User_UserName == HttpContext.Session.GetString("AdminID"))
+                {
+                  return RedirectToAction("Admin");
+                }
+                else
+                {
+                    return View(ud);
+                }
             }
             else return RedirectToAction("AdminLogin");
         }
