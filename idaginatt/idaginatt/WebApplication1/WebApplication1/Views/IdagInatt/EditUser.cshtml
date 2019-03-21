@@ -1,0 +1,56 @@
+﻿@model WebApplication1.Models.UserDetail
+
+@{
+    ViewData["Title"] = "EditUser";
+}
+
+<h2>EditUser</h2>
+
+<h4>UserDetail</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditUser">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="User_UserName" class="control-label"></label>
+                <input asp-for="User_UserName" class="form-control" />
+                <span asp-validation-for="User_UserName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="User_Password" class="control-label"></label>
+                <input asp-for="User_Password" class="form-control" />
+                <span asp-validation-for="User_Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="User_FirstName" class="control-label"></label>
+                <input asp-for="User_FirstName" class="form-control" />
+                <span asp-validation-for="User_FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="User_LastName" class="control-label"></label>
+                <input asp-for="User_LastName" class="form-control" />
+                <span asp-validation-for="User_LastName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="User_Class" class="control-label"></label>
+                <input asp-for="User_Class" class="form-control" />
+                <span asp-validation-for="User_Class" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Spara" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="AllUsers">Tillbaka</a>
+</div>
+

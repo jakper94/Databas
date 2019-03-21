@@ -516,6 +516,7 @@ namespace WebApplication1.Controllers
             else return RedirectToAction("AdminLogin");
         }
 
+        [HttpGet]
         public IActionResult EditUser()
         {
             return View();
