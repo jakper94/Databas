@@ -508,6 +508,7 @@ namespace WebApplication1.Controllers
             return RedirectToAction("AllUsers");
         }
 
+        [HttpGet]
         public IActionResult EditUser()
         {
             return View();
