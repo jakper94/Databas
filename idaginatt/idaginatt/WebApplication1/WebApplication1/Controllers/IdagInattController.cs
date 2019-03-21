@@ -380,7 +380,9 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult Attend()
         {
-            if (HttpContext.Session.GetString("UserID") != null)
+            ViewBag.Name = HttpContext.Session.GetString("UserID");
+            ViewBag.Admin = HttpContext.Session.GetString("AdminID");
+            if (ViewBag.Name != null || ViewBag.Admin != null)
             {
                 string username = HttpContext.Session.GetString("UserID");
                 string error = "";
