@@ -425,7 +425,10 @@ namespace WebApplication1.Controllers
         {
             return View(ad);
         }
-
+        public IActionResult AdminWarning()
+        {
+            return View();
+        }
         public IActionResult ViewAttending()
         {
 
@@ -494,7 +497,14 @@ namespace WebApplication1.Controllers
             {
                 UserDetail ud = new UserDetail();
             ud.User_UserName = username;
-            return View(ud);
+                if (ud.User_UserName == HttpContext.Session.GetString("AdminID"))
+                {
+                    return RedirectToAction("AdminWarning");
+                }
+                else
+                {
+                    return View(ud);
+                }
             }
             else return RedirectToAction("AdminLogin");
         }
@@ -516,12 +526,21 @@ namespace WebApplication1.Controllers
         {
             if (HttpContext.Session.GetString("AdminID") != null)
             {
-                UserMethod um = new UserMethod();
-            um.DeleteAdmin(username, out string errormsg);
+                
+                if (username == HttpContext.Session.GetString("AdminID"))
+                {
+                    return RedirectToAction("AdminWarning");
+                }
+                else
+                {
+                    UserMethod um = new UserMethod();
+                    um.DeleteAdmin(username, out string errormsg);
 
-            ViewData["error"] = errormsg;
+                    ViewData["error"] = errormsg;
+                    return RedirectToAction("AllUsers");
+                }
 
-            return RedirectToAction("AllUsers");
+                
             }
             else return RedirectToAction("AdminLogin");
         }
