@@ -380,9 +380,23 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult Attend()
         {
-            if (HttpContext.Session.GetString("UserID") != null)
+
+            
+            ViewBag.Name = HttpContext.Session.GetString("UserID");
+            ViewBag.Admin = HttpContext.Session.GetString("AdminID");
+            if (ViewBag.Name != null || ViewBag.Admin != null)
             {
-                string username = HttpContext.Session.GetString("UserID");
+                string username;
+                if (ViewBag.Admin != null)
+                {
+                    username = HttpContext.Session.GetString("AdminID");
+
+                }
+                else
+                {
+                    username = HttpContext.Session.GetString("UserID");
+                }
+                
                 string error = "";
                 UserMethod um = new UserMethod();
                 UserDetail ud = um.GetUserByUserName(username, out error);
@@ -393,12 +407,15 @@ namespace WebApplication1.Controllers
                 ad.Attending_Class = ud.User_Class;
                 return View(ad);
             }
+
             else
             {
                 HttpContext.Session.SetString("fromWhere", "attend");
                 return RedirectToAction("login");
             }
         }
+        
+
 
         [HttpPost]
         public IActionResult Attend(AttendingDetail ad)
@@ -423,7 +440,10 @@ namespace WebApplication1.Controllers
         {
             return View(ad);
         }
-
+        public IActionResult AdminWarning()
+        {
+            return View();
+        }
         public IActionResult ViewAttending()
         {
 
@@ -492,7 +512,14 @@ namespace WebApplication1.Controllers
             {
                 UserDetail ud = new UserDetail();
             ud.User_UserName = username;
-            return View(ud);
+                if (ud.User_UserName == HttpContext.Session.GetString("AdminID"))
+                {
+                    return RedirectToAction("AdminWarning");
+                }
+                else
+                {
+                    return View(ud);
+                }
             }
             else return RedirectToAction("AdminLogin");
         }
@@ -514,12 +541,21 @@ namespace WebApplication1.Controllers
         {
             if (HttpContext.Session.GetString("AdminID") != null)
             {
-                UserMethod um = new UserMethod();
-            um.DeleteAdmin(username, out string errormsg);
+                
+                if (username == HttpContext.Session.GetString("AdminID"))
+                {
+                    return RedirectToAction("AdminWarning");
+                }
+                else
+                {
+                    UserMethod um = new UserMethod();
+                    um.DeleteAdmin(username, out string errormsg);
 
-            ViewData["error"] = errormsg;
+                    ViewData["error"] = errormsg;
+                    return RedirectToAction("AllUsers");
+                }
 
-            return RedirectToAction("AllUsers");
+                
             }
             else return RedirectToAction("AdminLogin");
         }
