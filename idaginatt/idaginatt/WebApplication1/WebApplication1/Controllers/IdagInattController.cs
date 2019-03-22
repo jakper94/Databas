@@ -640,16 +640,24 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult RemoveUser(string id)
         {
+            
             if (HttpContext.Session.GetString("AdminID") != null)
             {
                 UserMethod um = new UserMethod();
                 UserDetail ud = new UserDetail();
 
                 ud = um.GetUserByUserName(id, out string errormsg);
-
+                if (ud.User_UserName == HttpContext.Session.GetString("AdminID"))
+                {
+                    return RedirectToAction("AdminWarning");
+                }
+                else
+                { 
+                
                 ViewData["error"] = errormsg;
 
                 return View(ud);
+            }
             }
             else return RedirectToAction("AdminLogin");
         }
